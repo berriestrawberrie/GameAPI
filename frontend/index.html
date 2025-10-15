@@ -4,19 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <!--TAILWIND-->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!--FONTAWESOME-->
+    <script
+      src="https://kit.fontawesome.com/df8ac4cd23.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body class="flex">
     <nav
       class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px]"
     >
-      <ul>
-        <li>Profile</li>
-        <li>Games</li>
-        <li>Scores</li>
+      <ul class="m-2">
+        <li><i class="fa-regular text-4xl fa-circle-user"></i> Profile</li>
+        <li><i class="fa-solid text-4xl fa-user-group"></i>Users</li>
+        <li><i class="fa-solid text-4xl fa-gamepad"></i>Games</li>
       </ul>
     </nav>
 
-    <div class="h-screen w-screen p-[20px]">content</div>
+    <div class="h-screen w-screen p-[20px]">
+      <!--WEATHER WIDGET-->
+      <div class="flex justify-between h-[10%]">
+        <div>
+          <p>Weather, Date</p>
+          <p>🌦️ 10°C</p>
+        </div>
+        <div class="border w-2/5 rounded-2xl h-[30px] pb-1 px-2">
+          <i class="fa-solid fa-magnifying-glass me-2"></i>Search
+        </div>
+      </div>
+      <!--END WEATHER WIDGET-->
+      Page content
+    </div>
   </body>
 </html>
