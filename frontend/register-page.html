@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/frontend/assets/styles.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
@@ -16,12 +16,19 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
 
-  <body class="flex bg-stone-100">
+  <body class="sm:flex bg-stone-100">
     <!-- SIDEBAR -->
     <nav
-      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+      class="border-r-1 border-stone-400 bg-stone-200 w-full flex flex-col items-center py-4 sm:h-screen sm:w-[70px]"
     >
-      <ul class="flex flex-col items-center space-y-6">
+      <ul
+        class="flex items-center w-full justify-evenly sm:flex-col sm:space-y-6"
+      >
+        <li>
+          <a href="index.html" title="Home">
+            <i class="fa-solid fa-house text-4xl hover:text-blue-600"></i>
+          </a>
+        </li>
         <!-- Profile (current page) -->
         <li>
           <a href="register-page.html" title="Profile">
@@ -47,6 +54,14 @@
           <a href="games.html" title="Games">
             <i
               class="fa-solid fa-gamepad text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="game-statistics.html" title="Game Statistics">
+            <i
+              class="fa-solid fa-trophy text-4xl hover:text-blue-600"
               aria-hidden="true"
             ></i>
           </a>
@@ -79,12 +94,10 @@
       <!-- END WEATHER WIDGET -->
 
       <!-- REGISTRATION CONTAINER -->
-      <div
-        class="bg-stone-200 rounded-xl h-[80%] flex justify-center items-center"
-      >
+      <div class="bg-stone-200 rounded-xl p-4 flex justify-center items-center">
         <form
           id="registerForm"
-          class="register w-[40%] mx-auto space-y-3"
+          class="register w-full sm:w-[40%] mx-auto space-y-3"
           action=""
           method=""
         >
@@ -115,14 +128,14 @@
             class="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none"
           />
 
-          <fieldset class="border-none mt-4">
+          <fieldset class="border-none flex-col sm:flex justify-between mt-4">
             <div class="flex flex-col items-center">
               <div
                 class="mb-[10px] w-fit border border-gray-400 p-2 rounded bg-white"
               >
                 <img
-                  class="opacity-50 w-[120px] h-[120px]"
-                  src="./images/user.png"
+                  class="opacity-50"
+                  src="./images/user-2.png"
                   alt="Profile Preview"
                 />
               </div>
@@ -130,14 +143,14 @@
                 type="file"
                 id="file"
                 name="file"
-                class="block text-sm text-gray-600"
+                class="block text-sm text-gray-600 max-w-[200px] rounded p-1"
               />
             </div>
 
             <div class="flex justify-center mt-6">
               <button
                 type="submit"
-                class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+                class="bg-blue-600 text-white rounded hover:bg-blue-700 transition"
               >
                 Register
               </button>

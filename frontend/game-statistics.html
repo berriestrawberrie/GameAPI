@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/frontend/assets/styles.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game Statistics</title>
@@ -19,27 +19,54 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
 
-  <body class="flex bg-stone-100">
+  <body class="sm:flex bg-stone-100">
     <!-- SIDEBAR -->
     <nav
-      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+      class="border-r-1 border-stone-400 bg-stone-200 w-full flex flex-col items-center py-4 sm:h-screen sm:w-[70px]"
     >
-      <ul class="flex flex-col items-center space-y-6">
+      <ul
+        class="flex items-center w-full justify-evenly sm:flex-col sm:space-y-6"
+      >
+        <li>
+          <a href="index.html" title="Home">
+            <i class="fa-solid fa-house text-4xl hover:text-blue-600"></i>
+          </a>
+        </li>
+        <!-- Profile (current page) -->
         <li>
           <a href="register-page.html" title="Profile">
             <i
               class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+
+        <!-- Users -->
+        <li>
+          <a href="users.html" title="Users">
+            <i
+              class="fa-solid fa-user-group text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+
+        <!-- Games -->
+        <li>
+          <a href="games.html" title="Games">
+            <i
+              class="fa-solid fa-gamepad text-4xl hover:text-blue-600"
+              aria-hidden="true"
             ></i>
           </a>
         </li>
         <li>
-          <a href="users.html" title="Users">
-            <i class="fa-solid fa-user-group text-4xl hover:text-blue-600"></i>
-          </a>
-        </li>
-        <li>
-          <a href="games.html" title="Games">
-            <i class="fa-solid fa-gamepad text-4xl text-blue-600"></i>
+          <a href="game-statistics.html" title="Game Statistics">
+            <i
+              class="fa-solid fa-trophy text-4xl text-blue-600"
+              aria-hidden="true"
+            ></i>
           </a>
         </li>
       </ul>
@@ -72,28 +99,49 @@
       <main
         class="bg-stone-200 rounded-xl flex flex-col items-center justify-center flex-1 p-6"
       >
-        <h1 class="text-2xl font-bold mb-6 text-gray-800">
-          Top 5 Players - Total Play Time
-        </h1>
-
-        <div class="bg-white rounded-lg shadow p-6 w-full max-w-4xl">
-          <canvas id="playersChart" width="400" height="200"></canvas>
+        <!--TOP CHARTS-->
+        <div class="w-full flex flex-col sm:flex-row">
+          <!--BAR CHART-->
+          <div class="rounded border sm:w-1/2">
+            <h1 class="text-2xl font-bold mb-6 text-gray-800">
+              Top 5 Players - Total Play Time
+            </h1>
+            <div class="bg-white rounded-lg shadow p-6 w-full max-w-4xl">
+              <canvas id="playersChart" width="400" height="200"></canvas>
+            </div>
+          </div>
+          <!--END OF BAR CHART-->
+          <!-- CHART-->
+          <div class="bg-sky-200 rounded border sm:w-1/2">Stuff here</div>
+          <!--END OF CHART-->
         </div>
+        <!--END OF TOP CHARTS-->
+
+        <!--BOTTOM CHARTS-->
+        <div class="w-full flex flex-col sm:flex-row">
+          <!-- CHART-->
+          <div class="bg-sky-200 rounded border sm:w-1/2">CHART 3</div>
+          <!--END OF CHART-->
+          <!-- CHART-->
+          <div class="bg-sky-200 rounded border sm:w-1/2">CHART 4</div>
+          <!--END OF CHART-->
+        </div>
+        <!--END OF BOTTOM CHARTS-->
 
         <!-- ACTION BUTTONS -->
-        <div class="flex gap-6 mt-8">
+        <div class="flex flex-col items-center sm:flex-row gap-6 mt-8">
           <button
             id="refreshBtn"
-            class="bg-gray-300 px-6 py-2 rounded font-semibold hover:bg-gray-400 transition"
+            class="bg-gray-300 rounded font-semibold hover:bg-gray-400 transition profile-btn"
           >
-            🔄 Refresh
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh
           </button>
 
           <button
             id="backBtn"
-            class="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 transition"
+            class="bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition profile-btn"
           >
-            ← Back to Games
+            <i class="fa-solid fa-gamepad"></i> Back to Games
           </button>
         </div>
       </main>

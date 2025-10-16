@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/frontend/assets/styles.css" />
+    <link rel="stylesheet" href="/frontend/assets/scroll.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Users</title>
@@ -16,30 +17,53 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
 
-  <body class="flex bg-stone-100">
+  <body class="sm:flex bg-stone-100">
     <!-- SIDEBAR -->
     <nav
-      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+      class="border-r-1 border-stone-400 bg-stone-200 w-full flex flex-col items-center py-4 sm:h-screen sm:w-[70px]"
     >
-      <ul class="flex flex-col items-center space-y-6">
+      <ul
+        class="flex items-center w-full justify-evenly sm:flex-col sm:space-y-6"
+      >
+        <li>
+          <a href="index.html" title="Home">
+            <i class="fa-solid fa-house text-4xl hover:text-blue-600"></i>
+          </a>
+        </li>
+        <!-- Profile (current page) -->
         <li>
           <a href="register-page.html" title="Profile">
             <i
-              class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+              class="fa-regular fa-circle-user text-4xl text-blue-600"
+              aria-hidden="true"
             ></i>
           </a>
         </li>
+
+        <!-- Users -->
         <li>
           <a href="users.html" title="Users">
             <i
-              class="fa-solid fa-user-group text-4xl text-blue-600"
+              class="fa-solid fa-user-group text-4xl hover:text-blue-600"
+              aria-hidden="true"
             ></i>
           </a>
         </li>
+
+        <!-- Games -->
         <li>
           <a href="games.html" title="Games">
             <i
               class="fa-solid fa-gamepad text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="game-statistics.html" title="Game Statistics">
+            <i
+              class="fa-solid fa-trophy text-4xl hover:text-blue-600"
+              aria-hidden="true"
             ></i>
           </a>
         </li>
@@ -68,21 +92,41 @@
           />
         </div>
       </div>
+      <!--WRAP THE AVATAR SCROLL AND NEW PERSON-->
+      <div
+        class="flex flex-col-reverse justify-end items-center sm:flex-row mb-4 gap-6"
+      >
+        <!-- SCROLL AVATARS-->
+        <div class="scroll-container">
+          <button class="scroll-btn left" onclick="scrollRight2()">
+            <i class="fa-solid fa-circle-chevron-left"></i>
+          </button>
+          <div class="scroll-content" id="scrollable">
+            <!-- Add more items as needed -->
+          </div>
 
-      <!-- TOP BAR: Add User -->
-      <div class="flex justify-end mb-4">
+          <button class="scroll-btn right" onclick="scrollRight()">
+            <i class="fa-solid fa-circle-chevron-right"></i>
+          </button>
+        </div>
+
+        <!-- TOP BAR: Add User -->
+
         <button
           id="addUserBtn"
           class="flex items-center gap-2 text-lg font-semibold hover:text-blue-600"
         >
-          Add User <i class="fa-solid fa-circle-plus text-2xl"></i>
+          Add User <i class="fa-solid fa-square-plus text-lg"></i>
         </button>
+
+        <!--END OF ADD USER-->
       </div>
+      <!--END OF WRAP THE AVATAR SCROLL AND NEW PERSON-->
 
       <!-- USERS GRID -->
       <div
         id="usersGrid"
-        class="grid grid-cols-2 md:grid-cols-4 gap-6 flex-1 overflow-y-auto"
+        class="mx-auto grid grid-cols-2 md:grid-cols-4 md:grid-cols-5 gap-6 flex-1 overflow-y-auto"
       >
         <!-- Cards will be dynamically inserted here -->
       </div>
@@ -106,10 +150,10 @@
       users.forEach((u) => {
         const card = document.createElement("div");
         card.className =
-          "cursor-pointer flex flex-col items-center bg-stone-200 rounded-lg p-2 hover:bg-stone-300 transition";
+          "w-fit cursor-pointer flex flex-col items-center bg-stone-200 rounded-lg p-2 hover:bg-stone-300 transition h-fit";
         card.innerHTML = `
           <div class="w-full bg-stone-100 aspect-square flex items-center justify-center rounded">
-            <img src="./images/user.png" alt="User" class="w-24 opacity-70" />
+            <img src="./images/user-2.png" alt="User" class="w-24 sm:w-[200px] opacity-70" />
           </div>
           <p class="mt-2 font-semibold text-center text-sm">${u.firstName} ${u.lastName}</p>
         `;
@@ -117,7 +161,10 @@
         // when user clicks on card → redirect to users-statistics.html
         card.addEventListener("click", () => {
           localStorage.setItem("selectedUserId", u.id);
-          localStorage.setItem("selectedUserName", `${u.firstName} ${u.lastName}`);
+          localStorage.setItem(
+            "selectedUserName",
+            `${u.firstName} ${u.lastName}`
+          );
           window.location.href = "users-statistics.html";
         });
 
@@ -127,7 +174,32 @@
       // Add User button → back to register-page.html
       document
         .getElementById("addUserBtn")
-        .addEventListener("click", () => (window.location.href = "register-page.html"));
+        .addEventListener(
+          "click",
+          () => (window.location.href = "register-page.html")
+        );
+
+      //Populate the avatar scroll
+      const scroller = document.getElementById("scrollable");
+      users.forEach((u) => {
+        const avatar = document.createElement("div");
+        avatar.className = "item cursor-pointer";
+        avatar.innerHTML = `<img
+                src="/frontend/images/user-2.png"
+                class="rounded-full object-cover border-1 border-stone-400"
+              />${u.firstName}`;
+        // when user clicks on card → redirect to users-statistics.html
+        avatar.addEventListener("click", () => {
+          localStorage.setItem("selectedUserId", u.id);
+          localStorage.setItem(
+            "selectedUserName",
+            `${u.firstName} ${u.lastName}`
+          );
+          window.location.href = "users-statistics.html";
+        });
+        scroller.appendChild(avatar);
+      });
     </script>
+    <script src="/frontend/assets/js/scroll.js"></script>
   </body>
 </html>
