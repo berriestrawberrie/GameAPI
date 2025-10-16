@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Statistics</title>
+
+    <!-- FONTAWESOME -->
+    <script
+      src="https://kit.fontawesome.com/df8ac4cd23.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="flex bg-stone-100">
+    <!-- SIDEBAR -->
+    <nav
+      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+    >
+      <ul class="flex flex-col items-center space-y-6">
+        <li>
+          <a href="register-page.html" title="Profile">
+            <i
+              class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="users.html" title="Users">
+            <i class="fa-solid fa-user-group text-4xl text-blue-600"></i>
+          </a>
+        </li>
+        <li>
+          <a href="games.html" title="Games">
+            <i class="fa-solid fa-gamepad text-4xl hover:text-blue-600"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="h-screen w-screen p-[20px] flex flex-col">
+      <!-- WEATHER + SEARCH BAR -->
+      <div class="flex justify-between h-[10%] mb-4">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold">
+            Wednesday, 15 Oct 2025
+          </p>
+          <p>🌦️ 10°C</p>
+        </div>
+
+        <div
+          class="flex items-center border w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
+        >
+          <i class="fa-solid fa-magnifying-glass mr-2"></i>
+          <input
+            type="text"
+            placeholder="Search"
+            class="w-full bg-transparent focus:outline-none text-sm"
+          />
+        </div>
+      </div>
+
+      <!-- USER STATS CONTENT -->
+      <main
+        class="bg-stone-200 rounded-xl flex flex-col items-center justify-center flex-1 p-6 text-center"
+      >
+        <h1 id="userName" class="text-2xl font-bold mb-6 text-gray-800">
+          User Statistics
+        </h1>
+
+        <!-- STATS PLACEHOLDER -->
+        <div class="bg-stone-100 rounded-lg shadow p-6 w-[80%] md:w-[60%] mb-8">
+          <p class="text-lg font-semibold mb-4 text-gray-700">Overview</p>
+
+          <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+            <div class="bg-white p-4 rounded shadow">
+              <p class="font-semibold">Total Games Played</p>
+              <p id="totalGames" class="text-blue-600 text-xl font-bold mt-1">
+                0
+              </p>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+              <p class="font-semibold">Total Play Time (min)</p>
+              <p id="totalTime" class="text-blue-600 text-xl font-bold mt-1">
+                0
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <p class="text-gray-600 italic text-sm">
+              Top game played:
+              <span id="topGame" class="font-semibold text-gray-800">N/A</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="flex gap-6">
+          <button
+            id="chooseNewPlayerBtn"
+            class="bg-gray-300 px-6 py-2 rounded font-semibold hover:bg-gray-400 transition"
+          >
+            ← Choose New Player
+          </button>
+
+          <button
+            id="playNewGameBtn"
+            class="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 transition"
+          >
+            Play New Game →
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Load selected user info from localStorage
+      const userName = localStorage.getItem("selectedUserName");
+      const userId = localStorage.getItem("selectedUserId");
+
+      const userTitle = document.getElementById("userName");
+      userTitle.textContent = userName
+        ? `Statistics for ${userName}`
+        : "No user selected";
+
+      // TODO: Replace these placeholders with API calls later
+      // Example API endpoint: GET /api/users/:id/statistics
+      const stats = {
+        totalGames: 4,
+        totalTime: 320,
+        topGame: "Game 2",
+      };
+
+      document.getElementById("totalGames").textContent = stats.totalGames;
+      document.getElementById("totalTime").textContent = stats.totalTime;
+      document.getElementById("topGame").textContent = stats.topGame;
+
+      // Buttons navigation
+      document
+        .getElementById("chooseNewPlayerBtn")
+        .addEventListener("click", () => {
+          window.location.href = "users.html";
+        });
+
+      document
+        .getElementById("playNewGameBtn")
+        .addEventListener("click", () => {
+          window.location.href = "games.html";
+        });
+    </script>
+  </body>
+</html>

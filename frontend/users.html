@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users</title>
+
+    <!-- FONTAWESOME -->
+    <script
+      src="https://kit.fontawesome.com/df8ac4cd23.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="flex bg-stone-100">
+    <!-- SIDEBAR -->
+    <nav
+      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+    >
+      <ul class="flex flex-col items-center space-y-6">
+        <li>
+          <a href="register-page.html" title="Profile">
+            <i
+              class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="users.html" title="Users">
+            <i
+              class="fa-solid fa-user-group text-4xl text-blue-600"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="games.html" title="Games">
+            <i
+              class="fa-solid fa-gamepad text-4xl hover:text-blue-600"
+            ></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="h-screen w-screen p-[20px] flex flex-col">
+      <!-- WEATHER + SEARCH -->
+      <div class="flex justify-between h-[10%] mb-4">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold">
+            Wednesday, 15 Oct 2025
+          </p>
+          <p>🌦️ 10°C</p>
+        </div>
+
+        <div
+          class="flex items-center border w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
+        >
+          <i class="fa-solid fa-magnifying-glass mr-2"></i>
+          <input
+            type="text"
+            placeholder="Search users..."
+            class="w-full bg-transparent focus:outline-none text-sm"
+          />
+        </div>
+      </div>
+
+      <!-- TOP BAR: Add User -->
+      <div class="flex justify-end mb-4">
+        <button
+          id="addUserBtn"
+          class="flex items-center gap-2 text-lg font-semibold hover:text-blue-600"
+        >
+          Add User <i class="fa-solid fa-circle-plus text-2xl"></i>
+        </button>
+      </div>
+
+      <!-- USERS GRID -->
+      <div
+        id="usersGrid"
+        class="grid grid-cols-2 md:grid-cols-4 gap-6 flex-1 overflow-y-auto"
+      >
+        <!-- Cards will be dynamically inserted here -->
+      </div>
+    </div>
+
+    <script>
+      // Placeholder users (later fetched from API)
+      const users = [
+        { id: 1, firstName: "Nicklas", lastName: "Svensson" },
+        { id: 2, firstName: "Sabrina", lastName: "Taylor" },
+        { id: 3, firstName: "Lucas", lastName: "Brown" },
+        { id: 4, firstName: "Maya", lastName: "Lee" },
+        { id: 5, firstName: "Oliver", lastName: "Smith" },
+        { id: 6, firstName: "Sophia", lastName: "Jones" },
+        { id: 7, firstName: "Ethan", lastName: "White" },
+        { id: 8, firstName: "Emma", lastName: "Wilson" },
+      ];
+
+      const grid = document.getElementById("usersGrid");
+
+      users.forEach((u) => {
+        const card = document.createElement("div");
+        card.className =
+          "cursor-pointer flex flex-col items-center bg-stone-200 rounded-lg p-2 hover:bg-stone-300 transition";
+        card.innerHTML = `
+          <div class="w-full bg-stone-100 aspect-square flex items-center justify-center rounded">
+            <img src="./images/user.png" alt="User" class="w-24 opacity-70" />
+          </div>
+          <p class="mt-2 font-semibold text-center text-sm">${u.firstName} ${u.lastName}</p>
+        `;
+
+        // when user clicks on card → redirect to users-statistics.html
+        card.addEventListener("click", () => {
+          localStorage.setItem("selectedUserId", u.id);
+          localStorage.setItem("selectedUserName", `${u.firstName} ${u.lastName}`);
+          window.location.href = "users-statistics.html";
+        });
+
+        grid.appendChild(card);
+      });
+
+      // Add User button → back to register-page.html
+      document
+        .getElementById("addUserBtn")
+        .addEventListener("click", () => (window.location.href = "register-page.html"));
+    </script>
+  </body>
+</html>

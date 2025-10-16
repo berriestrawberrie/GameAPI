@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Timer</title>
+
+    <!-- FONTAWESOME -->
+    <script
+      src="https://kit.fontawesome.com/df8ac4cd23.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="flex bg-stone-100">
+    <!-- SIDEBAR -->
+    <nav
+      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+    >
+      <ul class="flex flex-col items-center space-y-6">
+        <li>
+          <a href="register-page.html" title="Profile">
+            <i
+              class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="users.html" title="Users">
+            <i
+              class="fa-solid fa-user-group text-4xl hover:text-blue-600"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="games.html" title="Games">
+            <i
+              class="fa-solid fa-gamepad text-4xl text-blue-600"
+            ></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="h-screen w-screen p-[20px] flex flex-col">
+      <!-- WEATHER + SEARCH -->
+      <div class="flex justify-between h-[10%] mb-4">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold">
+            Wednesday, 15 Oct 2025
+          </p>
+          <p>🌦️ 10°C</p>
+        </div>
+
+        <div
+          class="flex items-center border w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
+        >
+          <i class="fa-solid fa-magnifying-glass mr-2"></i>
+          <input
+            type="text"
+            placeholder="Search"
+            class="w-full bg-transparent focus:outline-none text-sm"
+          />
+        </div>
+      </div>
+
+      <!-- TIMER SECTION -->
+      <main
+        class="bg-stone-200 rounded-xl flex flex-col items-center justify-center flex-1 text-center p-6"
+      >
+        <!-- GAME TITLE -->
+        <h1
+          id="gameTitle"
+          class="text-3xl font-bold mb-6 text-gray-800"
+        >
+          Game Timer
+        </h1>
+
+        <!-- TIMER DISPLAY -->
+        <div
+          id="timerDisplay"
+          class="text-6xl font-mono font-semibold text-blue-700 mb-10"
+        >
+          00:00
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="flex gap-6">
+          <button
+            id="startBtn"
+            class="bg-green-600 text-white px-6 py-2 rounded font-semibold hover:bg-green-700 transition"
+          >
+            ▶️ Start
+          </button>
+          <button
+            id="stopBtn"
+            class="bg-yellow-500 text-white px-6 py-2 rounded font-semibold hover:bg-yellow-600 transition"
+          >
+            ⏹️ Stop
+          </button>
+          <button
+            id="exitBtn"
+            class="bg-red-600 text-white px-6 py-2 rounded font-semibold hover:bg-red-700 transition"
+          >
+            ❌ Exit
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Load selected game name
+      const gameName = localStorage.getItem("selectedGame");
+      const title = document.getElementById("gameTitle");
+      title.textContent = gameName ? `${gameName}` : "Unknown Game";
+
+      // Timer logic
+      let timerInterval;
+      let elapsedSeconds = 0;
+
+      const display = document.getElementById("timerDisplay");
+      const startBtn = document.getElementById("startBtn");
+      const stopBtn = document.getElementById("stopBtn");
+      const exitBtn = document.getElementById("exitBtn");
+
+      function updateDisplay() {
+        const minutes = Math.floor(elapsedSeconds / 60)
+          .toString()
+          .padStart(2, "0");
+        const seconds = (elapsedSeconds % 60).toString().padStart(2, "0");
+        display.textContent = `${minutes}:${seconds}`;
+      }
+
+      startBtn.addEventListener("click", () => {
+        if (!timerInterval) {
+          timerInterval = setInterval(() => {
+            elapsedSeconds++;
+            updateDisplay();
+          }, 1000);
+        }
+      });
+
+      stopBtn.addEventListener("click", () => {
+        clearInterval(timerInterval);
+        timerInterval = null;
+
+        // TODO: Later send elapsedSeconds to backend (POST /api/sessions)
+        console.log(`Played ${gameName} for ${elapsedSeconds} seconds`);
+      });
+
+      exitBtn.addEventListener("click", () => {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        window.location.href = "games.html";
+      });
+
+      // Initialize display
+      updateDisplay();
+    </script>
+  </body>
+</html>

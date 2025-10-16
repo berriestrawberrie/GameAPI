@@ -5,62 +5,169 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
+
+    <!-- FONTAWESOME -->
     <script
       src="https://kit.fontawesome.com/df8ac4cd23.js"
       crossorigin="anonymous"
     ></script>
+
+    <!-- TAILWIND -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
-  <body class="flex">
+
+  <body class="flex bg-stone-100">
+    <!-- SIDEBAR -->
     <nav
-      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px]"
+      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
     >
-      <ul class="m-2">
-        <li><i class="fa-regular text-4xl fa-circle-user"></i> Profile</li>
-        <li><i class="fa-solid text-4xl fa-user-group"></i>Users</li>
-        <li><i class="fa-solid text-4xl fa-gamepad"></i>Games</li>
+      <ul class="flex flex-col items-center space-y-6">
+        <!-- Profile (current page) -->
+        <li>
+          <a href="register-page.html" title="Profile">
+            <i
+              class="fa-regular fa-circle-user text-4xl text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+
+        <!-- Users -->
+        <li>
+          <a href="users.html" title="Users">
+            <i
+              class="fa-solid fa-user-group text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+
+        <!-- Games -->
+        <li>
+          <a href="games.html" title="Games">
+            <i
+              class="fa-solid fa-gamepad text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
       </ul>
     </nav>
 
-    <div class="h-screen w-screen p-[20px]">
-      <!--WEATHER WIDGET-->
-      <div class="flex justify-between h-[10%]">
+    <!-- MAIN CONTENT -->
+    <div class="h-screen w-screen p-[20px] flex flex-col">
+      <!-- WEATHER + SEARCH BAR -->
+      <div class="flex justify-between h-[10%] mb-4">
         <div>
-          <p>Weather, Date</p>
+          <p class="text-gray-600 text-sm font-semibold">
+            Wednesday, 15 Oct 2025
+          </p>
           <p>🌦️ 10°C</p>
         </div>
-        <div class="border w-2/5 rounded-2xl h-[30px] pb-1 px-2">
-          <i class="fa-solid fa-magnifying-glass me-2"></i>Search
+
+        <div
+          class="flex items-center border w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
+        >
+          <i class="fa-solid fa-magnifying-glass mr-2"></i>
+          <input
+            type="text"
+            placeholder="Search"
+            class="w-full bg-transparent focus:outline-none text-sm"
+          />
         </div>
       </div>
-      <!--END WEATHER WIDGET-->
+      <!-- END WEATHER WIDGET -->
 
-      <!--REGISTRATION CONTAINER-->
+      <!-- REGISTRATION CONTAINER -->
       <div
         class="bg-stone-200 rounded-xl h-[80%] flex justify-center items-center"
       >
-        <form class="register w-[40%] mx-auto" action="" method="">
-          <label for="email">Email address *</label>
-          <input type="email" id="email" name="email" required />
+        <form
+          id="registerForm"
+          class="register w-[40%] mx-auto space-y-3"
+          action=""
+          method=""
+        >
+          <label for="email" class="block font-medium">Email address *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none"
+          />
 
-          <label for="firstName">First Name *</label>
-          <input type="text" id="firstName" name="firstName" required />
+          <label for="firstName" class="block font-medium">First Name *</label>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            required
+            class="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none"
+          />
 
-          <label for="lastName">Last Name *</label>
-          <input type="text" id="lastName" name="lastName" required />
+          <label for="lastName" class="block font-medium">Last Name *</label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            required
+            class="w-full border border-gray-400 rounded px-3 py-2 focus:outline-none"
+          />
 
-          <fieldset>
+          <fieldset class="border-none mt-4">
             <div class="flex flex-col items-center">
-              <div class="mb-[10px] w-fit border">
-                <img class="opacity-50" src="./images/user.png" />
+              <div
+                class="mb-[10px] w-fit border border-gray-400 p-2 rounded bg-white"
+              >
+                <img
+                  class="opacity-50 w-[120px] h-[120px]"
+                  src="./images/user.png"
+                  alt="Profile Preview"
+                />
               </div>
-              <input type="file" id="file" name="file" />
+              <input
+                type="file"
+                id="file"
+                name="file"
+                class="block text-sm text-gray-600"
+              />
             </div>
-            <button type="submit">Register</button>
+
+            <div class="flex justify-center mt-6">
+              <button
+                type="submit"
+                class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+              >
+                Register
+              </button>
+            </div>
           </fieldset>
         </form>
       </div>
-      <!--END OF REGISTRATION CONTAINER-->
+      <!-- END REGISTRATION CONTAINER -->
     </div>
+
+    <script>
+      // TEMPORARY: simulate registration, then redirect
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          // Collect input values (ready for API connection later)
+          const newUser = {
+            email: document.getElementById("email").value,
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+          };
+
+          console.log("New user registered:", newUser);
+
+          // Redirect to users.html (will show all players)
+          alert("Player registered successfully!");
+          window.location.href = "users.html";
+        });
+    </script>
   </body>
 </html>

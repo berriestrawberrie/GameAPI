@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Games</title>
+
+    <!-- FONTAWESOME -->
+    <script
+      src="https://kit.fontawesome.com/df8ac4cd23.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="flex bg-stone-100">
+    <!-- SIDEBAR -->
+    <nav
+      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+    >
+      <ul class="flex flex-col items-center space-y-6">
+        <li>
+          <a href="register-page.html" title="Profile">
+            <i
+              class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="users.html" title="Users">
+            <i class="fa-solid fa-user-group text-4xl hover:text-blue-600"></i>
+          </a>
+        </li>
+        <li>
+          <a href="games.html" title="Games">
+            <i class="fa-solid fa-gamepad text-4xl text-blue-600"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="h-screen w-screen p-[20px] flex flex-col">
+      <!-- WEATHER + SEARCH -->
+      <div class="flex justify-between h-[10%] mb-4">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold">
+            Wednesday, 15 Oct 2025
+          </p>
+          <p>🌦️ 10°C</p>
+        </div>
+
+        <div
+          class="flex items-center border w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
+        >
+          <i class="fa-solid fa-magnifying-glass mr-2"></i>
+          <input
+            type="text"
+            placeholder="Search"
+            class="w-full bg-transparent focus:outline-none text-sm"
+          />
+        </div>
+      </div>
+
+      <!-- GAME SELECTION SECTION -->
+      <main class="flex-1 flex flex-col items-center justify-start mt-4">
+        <h1 class="text-2xl font-bold mb-8 text-gray-800">
+          Choose a Game to Play
+        </h1>
+
+        <div
+          id="gamesGrid"
+          class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-5xl"
+        >
+          <!-- Game cards will be added dynamically -->
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Placeholder game data (later replace with backend API)
+      const games = [
+        { id: 1, name: "Game 1", icon: "fa-chess-knight" },
+        { id: 2, name: "Game 2", icon: "fa-basketball" },
+        { id: 3, name: "Game 3", icon: "fa-puzzle-piece" },
+        { id: 4, name: "Game 4", icon: "fa-dice" },
+      ];
+
+      const grid = document.getElementById("gamesGrid");
+
+      games.forEach((game) => {
+        const card = document.createElement("div");
+        card.className =
+          "cursor-pointer bg-stone-200 rounded-lg shadow hover:shadow-lg p-6 flex flex-col items-center justify-center transition hover:bg-stone-300";
+        card.innerHTML = `
+          <i class="fa-solid ${game.icon} text-6xl text-gray-700 mb-4"></i>
+          <p class="font-semibold text-gray-800">${game.name}</p>
+        `;
+
+        // When clicked → save game and redirect
+        card.addEventListener("click", () => {
+          localStorage.setItem("selectedGame", game.name);
+          window.location.href = "game-timer.html";
+        });
+
+        grid.appendChild(card);
+      });
+    </script>
+  </body>
+</html>

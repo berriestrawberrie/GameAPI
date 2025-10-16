@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Statistics</title>
+
+    <!-- FONTAWESOME -->
+    <script
+      src="https://kit.fontawesome.com/df8ac4cd23.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- TAILWIND -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body class="flex bg-stone-100">
+    <!-- SIDEBAR -->
+    <nav
+      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+    >
+      <ul class="flex flex-col items-center space-y-6">
+        <li>
+          <a href="register-page.html" title="Profile">
+            <i
+              class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+            ></i>
+          </a>
+        </li>
+        <li>
+          <a href="users.html" title="Users">
+            <i class="fa-solid fa-user-group text-4xl hover:text-blue-600"></i>
+          </a>
+        </li>
+        <li>
+          <a href="games.html" title="Games">
+            <i class="fa-solid fa-gamepad text-4xl text-blue-600"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="h-screen w-screen p-[20px] flex flex-col">
+      <!-- WEATHER + SEARCH -->
+      <div class="flex justify-between h-[10%] mb-4">
+        <div>
+          <p class="text-gray-600 text-sm font-semibold">
+            Wednesday, 15 Oct 2025
+          </p>
+          <p>🌦️ 10°C</p>
+        </div>
+
+        <div
+          class="flex items-center border w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
+        >
+          <i class="fa-solid fa-magnifying-glass mr-2"></i>
+          <input
+            type="text"
+            placeholder="Search"
+            class="w-full bg-transparent focus:outline-none text-sm"
+          />
+        </div>
+      </div>
+
+      <!-- STATISTICS CHART -->
+      <main
+        class="bg-stone-200 rounded-xl flex flex-col items-center justify-center flex-1 p-6"
+      >
+        <h1 class="text-2xl font-bold mb-6 text-gray-800">
+          Top 5 Players - Total Play Time
+        </h1>
+
+        <div class="bg-white rounded-lg shadow p-6 w-full max-w-4xl">
+          <canvas id="playersChart" width="400" height="200"></canvas>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="flex gap-6 mt-8">
+          <button
+            id="refreshBtn"
+            class="bg-gray-300 px-6 py-2 rounded font-semibold hover:bg-gray-400 transition"
+          >
+            🔄 Refresh
+          </button>
+
+          <button
+            id="backBtn"
+            class="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 transition"
+          >
+            ← Back to Games
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // Placeholder chart data (to be replaced with API data later)
+      const players = ["Nicklas", "Sabrina", "Lucas", "Maya", "Oliver"];
+      const totalTime = [320, 295, 280, 250, 240]; // in minutes
+      const colors = ["#2563eb", "#1d4ed8", "#3b82f6", "#60a5fa", "#93c5fd"];
+
+      const ctx = document.getElementById("playersChart").getContext("2d");
+      let chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: players,
+          datasets: [
+            {
+              label: "Total Play Time (min)",
+              data: totalTime,
+              backgroundColor: colors,
+              borderRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "Minutes Played",
+              },
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Players",
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+        },
+      });
+
+      // Buttons
+      document
+        .getElementById("refreshBtn")
+        .addEventListener("click", () => chart.update());
+
+      document.getElementById("backBtn").addEventListener("click", () => {
+        window.location.href = "games.html";
+      });
+    </script>
+  </body>
+</html>
