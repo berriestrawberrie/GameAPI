@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/frontend/assets/styles.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game Timer</title>
@@ -16,30 +16,53 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
 
-  <body class="flex bg-stone-100">
+  <body class="sm:flex bg-stone-100">
     <!-- SIDEBAR -->
     <nav
-      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+      class="border-r-1 border-stone-400 bg-stone-200 w-full flex flex-col items-center py-4 sm:h-screen sm:w-[70px]"
     >
-      <ul class="flex flex-col items-center space-y-6">
+      <ul
+        class="flex items-center w-full justify-evenly sm:flex-col sm:space-y-6"
+      >
+        <li>
+          <a href="index.html" title="Home">
+            <i class="fa-solid fa-house text-4xl hover:text-blue-600"></i>
+          </a>
+        </li>
+        <!-- Profile (current page) -->
         <li>
           <a href="register-page.html" title="Profile">
             <i
-              class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+              class="fa-regular fa-circle-user text-4xl text-blue-600"
+              aria-hidden="true"
             ></i>
           </a>
         </li>
+
+        <!-- Users -->
         <li>
           <a href="users.html" title="Users">
             <i
               class="fa-solid fa-user-group text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+
+        <!-- Games -->
+        <li>
+          <a href="games.html" title="Games">
+            <i
+              class="fa-solid fa-gamepad text-4xl hover:text-blue-600"
+              aria-hidden="true"
             ></i>
           </a>
         </li>
         <li>
-          <a href="games.html" title="Games">
+          <a href="game-statistics.html" title="Game Statistics">
             <i
-              class="fa-solid fa-gamepad text-4xl text-blue-600"
+              class="fa-solid fa-trophy text-4xl hover:text-blue-600"
+              aria-hidden="true"
             ></i>
           </a>
         </li>
@@ -71,15 +94,13 @@
 
       <!-- TIMER SECTION -->
       <main
-        class="bg-stone-200 rounded-xl flex flex-col items-center justify-center flex-1 text-center p-6"
+        class="bg-stone-200 rounded-xl flex flex-col items-center justify-center flex-1 text-center p-6 border"
       >
-        <!-- GAME TITLE -->
-        <h1
-          id="gameTitle"
-          class="text-3xl font-bold mb-6 text-gray-800"
-        >
+        <!-- GAME TITLE & ICON-->
+        <h1 id="gameTitle" class="text-3xl font-bold mb-6 text-gray-800">
           Game Timer
         </h1>
+        <i id="timerIcon" class="fa-solid text-6xl text-gray-700 mb-4"></i>
 
         <!-- TIMER DISPLAY -->
         <div
@@ -90,25 +111,34 @@
         </div>
 
         <!-- BUTTONS -->
-        <div class="flex gap-6">
+        <div class="flex flex-col sm:flex-row gap-6">
           <button
             id="startBtn"
-            class="bg-green-600 text-white px-6 py-2 rounded font-semibold hover:bg-green-700 transition"
+            class="bg-green-600 text-white rounded font-semibold hover:bg-green-700 transition"
           >
-            ▶️ Start
+            <i class="fa-solid fa-play"></i> Start
           </button>
           <button
             id="stopBtn"
-            class="bg-yellow-500 text-white px-6 py-2 rounded font-semibold hover:bg-yellow-600 transition"
+            class="bg-yellow-500 text-white rounded font-semibold hover:bg-yellow-600 transition"
           >
-            ⏹️ Stop
+            <i class="fa-solid fa-stop"></i> Stop
           </button>
           <button
             id="exitBtn"
-            class="bg-red-600 text-white px-6 py-2 rounded font-semibold hover:bg-red-700 transition"
+            class="bg-red-600 text-white rounded font-semibold hover:bg-red-700 transition"
           >
-            ❌ Exit
+            <i class="fa-solid fa-xmark"></i> Exit
           </button>
+        </div>
+        <!-- END OF BUTTONS -->
+
+        <!-- PLAYER INFO -->
+        <div class="w-full mt-4 flex justify-center sm:justify-end">
+          <div>
+            <img src="/frontend/images/user-2.png" class="border" />
+            {First Name} {Last Name}
+          </div>
         </div>
       </main>
     </div>
@@ -117,7 +147,16 @@
       // Load selected game name
       const gameName = localStorage.getItem("selectedGame");
       const title = document.getElementById("gameTitle");
+      const icon = document.getElementById("timerIcon");
       title.textContent = gameName ? `${gameName}` : "Unknown Game";
+      //SWITCH GAME ICON
+      gameName === "Game 1"
+        ? icon.classList.add("fa-chess-knight")
+        : gameName === "Game 2"
+        ? icon.classList.add("fa-basketball")
+        : gameName === "Game 3"
+        ? icon.classList.add("fa-puzzle-piece")
+        : icon.classList.add("fa-dice");
 
       // Timer logic
       let timerInterval;

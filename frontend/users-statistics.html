@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="/frontend/assets/styles.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Statistics</title>
@@ -16,27 +16,53 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
 
-  <body class="flex bg-stone-100">
+  <body class="sm:flex bg-stone-100">
     <!-- SIDEBAR -->
     <nav
-      class="border border-stone-400 border-2 bg-stone-200 h-screen w-[70px] flex flex-col items-center py-4"
+      class="border-r-1 border-stone-400 bg-stone-200 w-full flex flex-col items-center py-4 sm:h-screen sm:w-[70px]"
     >
-      <ul class="flex flex-col items-center space-y-6">
+      <ul
+        class="flex items-center w-full justify-evenly sm:flex-col sm:space-y-6"
+      >
+        <li>
+          <a href="index.html" title="Home">
+            <i class="fa-solid fa-house text-4xl hover:text-blue-600"></i>
+          </a>
+        </li>
+        <!-- Profile (current page) -->
         <li>
           <a href="register-page.html" title="Profile">
             <i
-              class="fa-regular fa-circle-user text-4xl hover:text-blue-600"
+              class="fa-regular fa-circle-user text-4xl text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+        <!-- Users -->
+        <li>
+          <a href="users.html" title="Users">
+            <i
+              class="fa-solid fa-user-group text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
+          </a>
+        </li>
+
+        <!-- Games -->
+        <li>
+          <a href="games.html" title="Games">
+            <i
+              class="fa-solid fa-gamepad text-4xl hover:text-blue-600"
+              aria-hidden="true"
             ></i>
           </a>
         </li>
         <li>
-          <a href="users.html" title="Users">
-            <i class="fa-solid fa-user-group text-4xl text-blue-600"></i>
-          </a>
-        </li>
-        <li>
-          <a href="games.html" title="Games">
-            <i class="fa-solid fa-gamepad text-4xl hover:text-blue-600"></i>
+          <a href="game-statistics.html" title="Game Statistics">
+            <i
+              class="fa-solid fa-trophy text-4xl hover:text-blue-600"
+              aria-hidden="true"
+            ></i>
           </a>
         </li>
       </ul>
@@ -73,49 +99,85 @@
           User Statistics
         </h1>
 
-        <!-- STATS PLACEHOLDER -->
-        <div class="bg-stone-100 rounded-lg shadow p-6 w-[80%] md:w-[60%] mb-8">
-          <p class="text-lg font-semibold mb-4 text-gray-700">Overview</p>
-
-          <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
-            <div class="bg-white p-4 rounded shadow">
-              <p class="font-semibold">Total Games Played</p>
-              <p id="totalGames" class="text-blue-600 text-xl font-bold mt-1">
-                0
-              </p>
-            </div>
-            <div class="bg-white p-4 rounded shadow">
-              <p class="font-semibold">Total Play Time (min)</p>
-              <p id="totalTime" class="text-blue-600 text-xl font-bold mt-1">
-                0
-              </p>
-            </div>
+        <!--TOP SECTION-->
+        <div class="w-full flex flex-col sm:flex-row sm:w-[80%] mb-2 gap-2">
+          <img src="/frontend/images/user-2.png" />
+          <!--TOPSTATS-->
+          <div class="bg-red-100 border rounded w-full">
+            <p>Top stats go here</p>
           </div>
+          <!--END OF TOP STATS-->
+        </div>
+        <!--END OF TOP SECTION-->
 
-          <div class="mt-6">
-            <p class="text-gray-600 italic text-sm">
-              Top game played:
-              <span id="topGame" class="font-semibold text-gray-800">N/A</span>
-            </p>
+        <!--BOTTOM SECTION-->
+        <div class="w-full flex flex-col sm:flex-row sm:w-[80%] gap-2">
+          <!--GAME CIRCLE CHART-->
+          <div class="bg-blue-100 border rounded w-full">
+            <p>Game Chart Stuff goes here</p>
           </div>
-        </div>
+          <!--GAME CIRCLE CHART-->
 
-        <!-- ACTION BUTTONS -->
-        <div class="flex gap-6">
-          <button
-            id="chooseNewPlayerBtn"
-            class="bg-gray-300 px-6 py-2 rounded font-semibold hover:bg-gray-400 transition"
-          >
-            ← Choose New Player
-          </button>
+          <!--STATS WRAPPER-->
+          <div>
+            <!-- STATS PLACEHOLDER -->
+            <div class="bg-stone-100 rounded-lg shadow p-6 mb-2">
+              <p class="text-lg font-semibold mb-4 text-gray-700">Overview</p>
 
-          <button
-            id="playNewGameBtn"
-            class="bg-blue-600 text-white px-6 py-2 rounded font-semibold hover:bg-blue-700 transition"
-          >
-            Play New Game →
-          </button>
+              <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                <div class="bg-white p-4 rounded shadow">
+                  <p class="font-semibold">Total Games Played</p>
+                  <p
+                    id="totalGames"
+                    class="text-blue-600 text-xl font-bold mt-1"
+                  >
+                    0
+                  </p>
+                </div>
+                <div class="bg-white p-4 rounded shadow">
+                  <p class="font-semibold">Total Play Time (min)</p>
+                  <p
+                    id="totalTime"
+                    class="text-blue-600 text-xl font-bold mt-1"
+                  >
+                    0
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <p class="text-gray-600 italic text-sm">
+                  Top game played:
+                  <span id="topGame" class="font-semibold text-gray-800"
+                    >N/A</span
+                  >
+                </p>
+              </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div
+              class="flex flex-col sm:flex-row items-center justify-center gap-6"
+            >
+              <button
+                id="chooseNewPlayerBtn"
+                class="bg-gray-300 rounded font-semibold hover:bg-gray-400 transition profile-btn"
+              >
+                <i class="fa-solid fa-user"></i> New Player
+              </button>
+
+              <button
+                id="playNewGameBtn"
+                class="bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition profile-btn"
+              >
+                <i class="fa-solid fa-gamepad"></i> Play New Game
+              </button>
+            </div>
+            <!--END OF ACTION BUTTONS -->
+          </div>
+          <!--END OF STATS WRAPPER-->
         </div>
+        <!--END OF BOTTOM SECTION-->
       </main>
     </div>
 
