@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/frontend/assets/styles.css" />
+    <link rel="stylesheet" href="assets/styles.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Games</title>
@@ -108,33 +108,56 @@
     </div>
 
     <script>
-      // Placeholder game data (later replace with backend API)
-      const games = [
-        { id: 1, name: "Game 1", icon: "fa-chess-knight" },
-        { id: 2, name: "Game 2", icon: "fa-basketball" },
-        { id: 3, name: "Game 3", icon: "fa-puzzle-piece" },
-        { id: 4, name: "Game 4", icon: "fa-dice" },
-      ];
+      const API_BASE = "http://localhost:5001/api";
 
-      const grid = document.getElementById("gamesGrid");
+      // Fetch games from backend API
+      async function fetchGamesFromApi() {
+        const res = await fetch(`${API_BASE}/games`);
+        if (!res.ok) throw new Error("Failed to fetch games");
+        return res.json();
+      }
 
-      games.forEach((game) => {
-        const card = document.createElement("div");
-        card.className =
-          "cursor-pointer bg-stone-200 rounded-lg shadow hover:shadow-lg p-6 flex flex-col items-center justify-center transition hover:bg-stone-300";
-        card.innerHTML = `
-          <i class="fa-solid ${game.icon} text-6xl text-gray-700 mb-4"></i>
-          <p class="font-semibold text-gray-800">${game.name}</p>
-        `;
+      // Render games dynamically
+      async function renderGames() {
+        const grid = document.getElementById("gamesGrid");
+        grid.innerHTML = "<p>Loading games...</p>";
 
-        // When clicked → save game and redirect
-        card.addEventListener("click", () => {
-          localStorage.setItem("selectedGame", game.name);
-          window.location.href = "game-timer.html";
-        });
+        try {
+          const games = await fetchGamesFromApi();
+          grid.innerHTML = "";
 
-        grid.appendChild(card);
-      });
+          games.forEach((game) => {
+            const card = document.createElement("div");
+            card.className =
+              "cursor-pointer bg-stone-200 rounded-lg shadow hover:shadow-lg p-6 flex flex-col items-center justify-center transition hover:bg-stone-300";
+            card.innerHTML = `
+              <i class="fa-solid ${
+                game.icon || "fa-gamepad"
+              } text-6xl text-gray-700 mb-4"></i>
+              <p class="font-semibold text-gray-800">${
+                game.title || game.name
+              }</p>
+              <p class="text-sm text-gray-500 mt-2">${
+                game.description || ""
+              }</p>
+            `;
+
+            card.addEventListener("click", () => {
+              localStorage.setItem("selectedGameId", game.id);
+              localStorage.setItem("selectedGame", game.title || game.name);
+              window.location.href = "game-timer.html";
+            });
+
+            grid.appendChild(card);
+          });
+        } catch (err) {
+          grid.innerHTML = '<p class="text-red-600">Failed to load games</p>';
+          console.error(err);
+        }
+      }
+
+      // Render games on page load
+      renderGames();
     </script>
   </body>
 </html>

@@ -35,8 +35,8 @@ Managed with Prisma ORM.
 
 ## Workflow
 
-1. Backend team runs API server (port 3000).
-2. Frontend team connects using `fetch('http://localhost:3000/api/...')`.
+1. Backend team runs API server (port 5001).
+2. Frontend team connects using `fetch('http://localhost:5001/api/...')`.
 3. Data updates appear in stats and charts.
 
 ## /backend/package.json

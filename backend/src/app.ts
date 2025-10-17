@@ -7,3 +7,22 @@
  * Backend team:
  * - Add new route imports here when new endpoints are created.
  */
+import express from "express";
+import cors from "cors";
+import usersRouter from "./routes/users";
+import gamesRouter from "./routes/games";
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+// Mount API routes
+app.use("/api/users", usersRouter);
+app.use("/api/games", gamesRouter);
+
+app.get("/", (req, res) => {
+  res.send("🎮 Game Time Tracker API is running!");
+});
+
+export default app;

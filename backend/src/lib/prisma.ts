@@ -4,3 +4,8 @@
  *
  * Backend team: import from here in every file that accesses the DB.
  */
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+export { prisma };

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/frontend/assets/styles.css" />
-    <link rel="stylesheet" href="/frontend/assets/scroll.css" />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/scroll.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Users</title>
@@ -133,73 +133,91 @@
     </div>
 
     <script>
-      // Placeholder users (later fetched from API)
-      const users = [
-        { id: 1, firstName: "Nicklas", lastName: "Svensson" },
-        { id: 2, firstName: "Sabrina", lastName: "Taylor" },
-        { id: 3, firstName: "Lucas", lastName: "Brown" },
-        { id: 4, firstName: "Maya", lastName: "Lee" },
-        { id: 5, firstName: "Oliver", lastName: "Smith" },
-        { id: 6, firstName: "Sophia", lastName: "Jones" },
-        { id: 7, firstName: "Ethan", lastName: "White" },
-        { id: 8, firstName: "Emma", lastName: "Wilson" },
-      ];
+      const API_BASE = "http://localhost:5001/api";
 
-      const grid = document.getElementById("usersGrid");
+      // Fetch users from backend API
+      async function fetchUsersFromApi() {
+        const res = await fetch(`${API_BASE}/users`);
+        if (!res.ok) throw new Error("Failed to fetch users");
+        return res.json();
+      }
 
-      users.forEach((u) => {
-        const card = document.createElement("div");
-        card.className =
-          "w-fit cursor-pointer flex flex-col items-center bg-stone-200 rounded-lg p-2 hover:bg-stone-300 transition h-fit";
-        card.innerHTML = `
-          <div class="w-full bg-stone-100 aspect-square flex items-center justify-center rounded">
-            <img src="./images/user-2.png" alt="User" class="w-24 sm:w-[200px] opacity-70" />
-          </div>
-          <p class="mt-2 font-semibold text-center text-sm">${u.firstName} ${u.lastName}</p>
-        `;
+      // Render users on main grid and avatar scroll
+      async function renderUsers() {
+        const grid = document.getElementById("usersGrid");
+        const scroller = document.getElementById("scrollable");
 
-        // when user clicks on card → redirect to users-statistics.html
-        card.addEventListener("click", () => {
-          localStorage.setItem("selectedUserId", u.id);
-          localStorage.setItem(
-            "selectedUserName",
-            `${u.firstName} ${u.lastName}`
-          );
-          window.location.href = "users-statistics.html";
-        });
+        // Show loading states
+        grid.innerHTML = "<p>Loading users...</p>";
+        scroller.innerHTML = "";
 
-        grid.appendChild(card);
-      });
+        try {
+          const users = await fetchUsersFromApi();
+          grid.innerHTML = "";
 
-      // Add User button → back to register-page.html
+          // Main grid
+          users.forEach((u) => {
+            const card = document.createElement("div");
+            card.className =
+              "cursor-pointer flex flex-col items-center bg-stone-200 rounded-lg p-2 hover:bg-stone-300 transition";
+            card.innerHTML = `
+              <div class="w-full bg-stone-100 aspect-square flex items-center justify-center rounded">
+                <img src="${
+                  u.avatarUrl || "./images/user.png"
+                }" alt="User" class="w-24 opacity-70" />
+              </div>
+              <p class="mt-2 font-semibold text-center text-sm">${
+                u.firstName
+              } ${u.lastName}</p>
+            `;
+            card.addEventListener("click", () => {
+              localStorage.setItem("selectedUserId", u.id);
+              localStorage.setItem(
+                "selectedUserName",
+                `${u.firstName} ${u.lastName}`
+              );
+              window.location.href = "users-statistics.html";
+            });
+            grid.appendChild(card);
+          });
+
+          // Avatar scroll
+          users.forEach((u) => {
+            const avatar = document.createElement("div");
+            avatar.className = "item cursor-pointer";
+            avatar.innerHTML = `<img src="${
+              u.avatarUrl || "./images/user.png"
+            }" class="rounded-full object-cover border-1 border-stone-400" />${
+              u.firstName
+            }`;
+            avatar.addEventListener("click", () => {
+              localStorage.setItem("selectedUserId", u.id);
+              localStorage.setItem(
+                "selectedUserName",
+                `${u.firstName} ${u.lastName}`
+              );
+              window.location.href = "users-statistics.html";
+            });
+            scroller.appendChild(avatar);
+          });
+        } catch (err) {
+          grid.innerHTML = '<p class="text-red-600">Failed to load users</p>';
+          console.error(err);
+        }
+      }
+
+      // Render users on page load
+      renderUsers();
+
+      // Add User button → redirect to register page
       document
         .getElementById("addUserBtn")
         .addEventListener(
           "click",
           () => (window.location.href = "register-page.html")
         );
-
-      //Populate the avatar scroll
-      const scroller = document.getElementById("scrollable");
-      users.forEach((u) => {
-        const avatar = document.createElement("div");
-        avatar.className = "item cursor-pointer";
-        avatar.innerHTML = `<img
-                src="/frontend/images/user-2.png"
-                class="rounded-full object-cover border-1 border-stone-400"
-              />${u.firstName}`;
-        // when user clicks on card → redirect to users-statistics.html
-        avatar.addEventListener("click", () => {
-          localStorage.setItem("selectedUserId", u.id);
-          localStorage.setItem(
-            "selectedUserName",
-            `${u.firstName} ${u.lastName}`
-          );
-          window.location.href = "users-statistics.html";
-        });
-        scroller.appendChild(avatar);
-      });
     </script>
-    <script src="/frontend/assets/js/scroll.js"></script>
+
+    <script src="assets/js/scroll.js"></script>
   </body>
 </html>
