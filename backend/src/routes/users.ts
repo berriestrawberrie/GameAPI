@@ -34,4 +34,33 @@ router.get("/", async (req, res) => {
   }
 });
 
+// POST Endpoint to create a new user
+router.post("/", async (req, res) => {
+  const { email, firstName, lastName, avatarUrl } = req.body;
+
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        firstName,
+        lastName,
+        avatarUrl: avatarUrl || null, // Optional field
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        avatarUrl: true,
+        createdAt: true,
+      },
+    });
+
+    res.status(201).json(newUser);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ error: "Failed to create user" });
+  }
+});
+
 export default router;
