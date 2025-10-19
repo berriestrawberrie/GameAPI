@@ -175,11 +175,28 @@
             lastName: document.getElementById("lastName").value,
           };
 
-          console.log("New user registered:", newUser);
-
-          // Redirect to users.html (will show all players)
-          alert("Player registered successfully!");
-          window.location.href = "users.html";
+          fetch("http://localhost:5000/api/users", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newUser),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Success:", data);
+              alert("Player registered successfully!");
+              window.location.href = "users.html";
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("There was an error registering the player.");
+            });
         });
     </script>
   </body>
