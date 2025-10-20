@@ -118,8 +118,39 @@
 
       <!-- TIMER SECTION -->
       <main
-        class="bg-stone-200 rounded-xl flex flex-col items-center justify-center flex-1 text-center p-6 border"
+        class="relative bg-stone-200 rounded-xl flex flex-col items-center justify-center flex-1 text-center p-6 border"
       >
+        <!--GAME RULES-->
+        <div class="absolute top-0 right-[5px]">
+          <span
+            onclick="toggleDiv()"
+            class="absolute right-0 top-0 text-blue-600 text-3xl rounded hover:cursor-pointer transition"
+            ><i class="fa-solid fa-circle-question"></i
+          ></span>
+          <div
+            id="toggleContent"
+            class="mt-8 p-4 bg-white rounded shadow transition-opacity opacity-0 pointer-events-none"
+          >
+            <p class="text-left">
+              <span class="font-bold">Directions:</span> Score will be recorded
+              for the current player.
+            </p>
+            <ul class="text-left">
+              <li>
+                Press Start ( <i class="fa-solid fa-play"></i> ) to play the
+                game.
+              </li>
+              <li>
+                Press Stop ( <i class="fa-solid fa-stop"></i> ) to end the game
+                and send your score
+              </li>
+              <li>
+                Press Exit ( <i class="fa-solid fa-xmark"></i> ) if you want to
+                return to game selection without saving
+              </li>
+            </ul>
+          </div>
+        </div>
         <!-- GAME TITLE & ICON-->
         <h1 id="gameTitle" class="text-3xl font-bold mb-6 text-gray-800">
           Game Timer
@@ -148,6 +179,7 @@
           >
             <i class="fa-solid fa-stop"></i> Stop
           </button>
+
           <button
             id="exitBtn"
             class="bg-red-600 text-white rounded font-semibold hover:bg-red-700 transition"
@@ -158,73 +190,32 @@
         <!-- END OF BUTTONS -->
 
         <!-- PLAYER INFO -->
-        <div class="w-full mt-4 flex justify-center sm:justify-end">
+        <div
+          class="w-full mt-8 flex flex-col-reverse items-center sm:items-start justify-center sm:flex-row sm:justify-end"
+        >
+          <!--SCORES TABLE-->
+          <div class="w-full">
+            <table class="mx-auto w-1/2 table-auto" id="scores-table">
+              <thead>
+                <tr class="bg-blue-600 font-bold text-white">
+                  <td>Game</td>
+                  <td>User</td>
+                  <td>Minutes Played</td>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <!--END SCORES TABLE-->
           <div>
             <img src="/frontend/images/user-2.png" class="border" />
-            {First Name} {Last Name}
+            <p id="game-user"></p>
           </div>
         </div>
       </main>
     </div>
 
-    <script>
-      // Load selected game name
-      const gameName = localStorage.getItem("selectedGame");
-      const title = document.getElementById("gameTitle");
-      const icon = document.getElementById("timerIcon");
-      title.textContent = gameName ? `${gameName}` : "Unknown Game";
-      //SWITCH GAME ICON
-      gameName === "Game 1"
-        ? icon.classList.add("fa-chess-knight")
-        : gameName === "Game 2"
-        ? icon.classList.add("fa-basketball")
-        : gameName === "Game 3"
-        ? icon.classList.add("fa-puzzle-piece")
-        : icon.classList.add("fa-dice");
-
-      // Timer logic
-      let timerInterval;
-      let elapsedSeconds = 0;
-
-      const display = document.getElementById("timerDisplay");
-      const startBtn = document.getElementById("startBtn");
-      const stopBtn = document.getElementById("stopBtn");
-      const exitBtn = document.getElementById("exitBtn");
-
-      function updateDisplay() {
-        const minutes = Math.floor(elapsedSeconds / 60)
-          .toString()
-          .padStart(2, "0");
-        const seconds = (elapsedSeconds % 60).toString().padStart(2, "0");
-        display.textContent = `${minutes}:${seconds}`;
-      }
-
-      startBtn.addEventListener("click", () => {
-        if (!timerInterval) {
-          timerInterval = setInterval(() => {
-            elapsedSeconds++;
-            updateDisplay();
-          }, 1000);
-        }
-      });
-
-      stopBtn.addEventListener("click", () => {
-        clearInterval(timerInterval);
-        timerInterval = null;
-
-        // TODO: Later send elapsedSeconds to backend (POST /api/sessions)
-        console.log(`Played ${gameName} for ${elapsedSeconds} seconds`);
-      });
-
-      exitBtn.addEventListener("click", () => {
-        clearInterval(timerInterval);
-        timerInterval = null;
-        window.location.href = "games.html";
-      });
-
-      // Initialize display
-      updateDisplay();
-    </script>
     <script src="./assets/js/weather.js"></script>
+    <script src="./assets/js/scores.js"></script>
   </body>
 </html>

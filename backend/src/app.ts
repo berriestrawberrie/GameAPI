@@ -11,6 +11,7 @@ import express from "express";
 import cors from "cors";
 import usersRouter from "./routes/users";
 import gamesRouter from "./routes/games";
+import scoresRouter from "./routes/scores";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 // Mount API routes
 app.use("/api/users", usersRouter);
 app.use("/api/games", gamesRouter);
+app.use("/api/scores", scoresRouter);
 
 app.get("/", (req, res) => {
   res.send("🎮 Game Time Tracker API is running!");

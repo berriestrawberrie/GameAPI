@@ -11,6 +11,15 @@ button:hover {
   transform: translate(2px, 3px);
 }
 
+tr,
+td {
+  padding: 5px;
+  border: 1px solid blue;
+}
+tbody tr {
+  background-color: #fff;
+}
+
 .register input {
   border: 1px solid black;
   display: block;
@@ -25,4 +34,9 @@ button:hover {
 
 .profile-btn {
   width: 150px;
+}
+
+/* TOGGLE TRANSITION*/
+.transition-opacity {
+  transition: opacity 300ms ease-in-out;
 }
