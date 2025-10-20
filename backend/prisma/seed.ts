@@ -16,6 +16,11 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding test data...");
 
+  // Clear existing data to avoid duplicates
+  await prisma.score.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.game.deleteMany();
+
   // --- Users ---
   const user1 = await prisma.user.create({
     data: {
