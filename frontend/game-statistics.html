@@ -73,12 +73,12 @@
     </nav>
 
     <!-- MAIN CONTENT -->
-    <div class="h-screen w-screen p-[20px] flex flex-col">
-      <!-- WEATHER + SEARCH -->
-      <div class="flex justify-between h-[10%] mb-4">
+    <div class="h-screen w-screen p-[20px]">
+      <!--WEATHER WIDGET-->
+      <div class="flex flex-col-reverse sm:flex-row justify-between">
         <div>
           <!-- Weather Widget -->
-          <div class="mx-auto max-w-3xl mb-12 p-4">
+          <div class="mx-auto max-w-3xl p-4">
             <!--WEATHER INPU & BUTTON-->
             <div class="flex relative">
               <h2
@@ -106,9 +106,8 @@
           </div>
           <!--  END OF WEATHER WIDGET-->
         </div>
-
         <div
-          class="flex items-center border w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
+          class="flex items-center border w-full mb-2 sm:w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
         >
           <i class="fa-solid fa-magnifying-glass mr-2"></i>
           <input
@@ -118,6 +117,7 @@
           />
         </div>
       </div>
+      <!--END WEATHER WIDGET-->
 
       <!-- STATISTICS CHART -->
       <main
