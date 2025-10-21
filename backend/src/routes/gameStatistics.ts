@@ -67,4 +67,66 @@ router.get("/top-games", async (req, res) => {
   }
 });
 
+// GET /api/statistics/avg-playtime
+router.get("/avg-playtime", async (req, res) => {
+  try {
+    const results = await prisma.score.groupBy({
+      by: ["gameId"],
+      _avg: { durationMinutes: true },
+      orderBy: { _avg: { durationMinutes: "desc" } },
+    });
+
+    const games = await Promise.all(
+      results.map(async (r) => {
+        const game = await prisma.game.findUnique({
+          where: { id: r.gameId },
+          select: { title: true },
+        });
+        return {
+          title: game?.title ?? "Unknown Game",
+          avgMinutes: Math.round(r._avg.durationMinutes ?? 0),
+        };
+      })
+    );
+
+    res.json(games);
+  } catch (error) {
+    console.error("Error fetching average playtime:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to fetch average playtime per game" });
+  }
+});
+
+// GET /api/statistics/playtime-last-7-days
+router.get("/playtime-last-7-days", async (req, res) => {
+  try {
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 6);
+
+    const results = await prisma.score.groupBy({
+      by: ["createdAt"], // Replace "createdAt" with the correct field name from your schema
+      _sum: { durationMinutes: true },
+      where: {
+        createdAt: { gte: sevenDaysAgo, lte: today },
+      },
+      orderBy: { createdAt: "asc" },
+    });
+
+    const formatted = results.map((r) => ({
+      date: new Date(r.createdAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      totalMinutes: r._sum.durationMinutes ?? 0,
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    console.error("Error fetching playtime history:", error);
+    res.status(500).json({ error: "Failed to fetch playtime history" });
+  }
+});
+
 export default router;

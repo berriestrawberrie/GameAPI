@@ -150,11 +150,29 @@
 
         <!--BOTTOM CHARTS-->
         <div class="w-full flex flex-col sm:flex-row">
-          <!-- CHART-->
-          <div class="bg-sky-200 rounded border sm:w-1/2">CHART 3</div>
+          <!-- AVERAGE PLAYTIME CHART -->
+          <div class="rounded border sm:w-1/2 p-4 flex flex-col items-center">
+            <h1 class="text-2xl font-bold mb-4 text-gray-800">
+              Average Playtime per Game
+            </h1>
+            <div class="bg-white rounded-lg shadow p-6 w-full max-w-2xl">
+              <canvas id="avgPlaytimeChart" width="400" height="200"></canvas>
+            </div>
+          </div>
           <!--END OF CHART-->
-          <!-- CHART-->
-          <div class="bg-sky-200 rounded border sm:w-1/2">CHART 4</div>
+          <!-- PLAYTIME HISTORY CHART -->
+          <div class="rounded border sm:w-1/2 p-4 flex flex-col items-center">
+            <h1 class="text-2xl font-bold mb-4 text-gray-800">
+              Playtime (Last 7 Days)
+            </h1>
+            <div class="bg-white rounded-lg shadow p-6 w-full max-w-2xl">
+              <canvas
+                id="playtimeHistoryChart"
+                width="400"
+                height="200"
+              ></canvas>
+            </div>
+          </div>
           <!--END OF CHART-->
         </div>
         <!--END OF BOTTOM CHARTS-->
@@ -299,11 +317,125 @@
         });
       }
 
-      // Buttons
-      document.getElementById("refreshBtn").addEventListener("click", () => {
-        renderTopPlayersChart();
-      });
+      async function fetchAvgPlaytime() {
+        try {
+          const res = await fetch(`${API_BASE}/statistics/avg-playtime`);
+          if (!res.ok) throw new Error("Failed to fetch avg playtime");
+          return res.json();
+        } catch (err) {
+          console.error(err);
+          return [];
+        }
+      }
 
+      async function renderAvgPlaytimeChart() {
+        const data = await fetchAvgPlaytime();
+        if (data.length === 0) return;
+
+        const ctx = document
+          .getElementById("avgPlaytimeChart")
+          .getContext("2d");
+
+        const labels = data.map((g) => g.title);
+        const values = data.map((g) => g.avgMinutes);
+
+        if (window.avgPlaytimeChart instanceof Chart)
+          window.avgPlaytimeChart.destroy();
+
+        window.avgPlaytimeChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Average Playtime (min)",
+                data: values,
+                backgroundColor: "#34d399",
+                borderRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { display: true, text: "Minutes" },
+              },
+            },
+          },
+        });
+      }
+
+      async function fetchPlaytimeHistory() {
+        try {
+          const res = await fetch(
+            `${API_BASE}/statistics/playtime-last-7-days`
+          );
+          if (!res.ok) throw new Error("Failed to fetch playtime history");
+          return res.json();
+        } catch (err) {
+          console.error(err);
+          return [];
+        }
+      }
+
+      async function renderPlaytimeHistoryChart() {
+        const data = await fetchPlaytimeHistory();
+        if (data.length === 0) return;
+
+        const ctx = document
+          .getElementById("playtimeHistoryChart")
+          .getContext("2d");
+
+        const labels = data.map((d) => d.date);
+        const values = data.map((d) => d.totalMinutes);
+
+        if (window.playtimeHistoryChart instanceof Chart)
+          window.playtimeHistoryChart.destroy();
+
+        window.playtimeHistoryChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Total Minutes Played",
+                data: values,
+                borderColor: "#2563eb",
+                backgroundColor: "rgba(37,99,235,0.3)",
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { position: "bottom" } },
+            scales: {
+              y: { beginAtZero: true },
+            },
+          },
+        });
+      }
+      // Button to refresh all charts
+      async function refreshAllCharts() {
+        console.log("Refreshing all charts...");
+        await Promise.all([
+          renderTopPlayersChart(),
+          renderTopGamesChart(),
+          renderAvgPlaytimeChart(),
+          renderPlaytimeHistoryChart(),
+        ]);
+        console.log("✅ All charts refreshed successfully");
+      }
+
+      document
+        .getElementById("refreshBtn")
+        .addEventListener("click", refreshAllCharts);
+
+      // Button to go back to games
       document.getElementById("backBtn").addEventListener("click", () => {
         window.location.href = "games.html";
       });
@@ -311,6 +443,8 @@
       // Initial load
       renderTopPlayersChart();
       renderTopGamesChart();
+      renderAvgPlaytimeChart();
+      renderPlaytimeHistoryChart();
     </script>
     <script src="./assets/js/weather.js"></script>
   </body>
