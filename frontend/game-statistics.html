@@ -22,7 +22,7 @@
   <body class="sm:flex bg-stone-100">
     <!-- SIDEBAR -->
     <nav
-      class="border-r-1 border-stone-400 bg-stone-200 w-full flex flex-col items-center py-4 sm:h-screen sm:w-[70px]"
+      class="border-r border-stone-400 bg-stone-200 w-full flex flex-col items-center py-4 sm:h-screen sm:w-[70px]"
     >
       <ul
         class="flex items-center w-full justify-evenly sm:flex-col sm:space-y-6"
@@ -135,9 +135,16 @@
             </div>
           </div>
           <!--END OF BAR CHART-->
-          <!-- CHART-->
-          <div class="bg-sky-200 rounded border sm:w-1/2">Stuff here</div>
-          <!--END OF CHART-->
+          <!-- PIE CHART FOR TOP GAMES -->
+          <div class="rounded border sm:w-1/2 p-4 flex flex-col items-center">
+            <h1 class="text-2xl font-bold mb-4 text-gray-800">
+              Top 3 Most Played Games
+            </h1>
+            <div class="bg-white rounded-lg shadow p-6 w-full max-w-sm">
+              <canvas id="topGamesChart" width="300" height="300"></canvas>
+            </div>
+          </div>
+          <!-- END PIE CHART -->
         </div>
         <!--END OF TOP CHARTS-->
 
@@ -244,6 +251,54 @@
         });
       }
 
+      async function fetchTopGames() {
+        try {
+          const res = await fetch(`${API_BASE}/statistics/top-games`);
+          if (!res.ok) throw new Error("Failed to fetch top games");
+          return res.json();
+        } catch (err) {
+          console.error(err);
+          return [];
+        }
+      }
+
+      async function renderTopGamesChart() {
+        const gameStats = await fetchTopGames(); // fetchTopGames calls /statistics/top-games
+
+        if (!Array.isArray(gameStats) || gameStats.length === 0) return;
+
+        const labels = gameStats.map((g) => g.title); // backend returns { title, totalMinutes }
+        const data = gameStats.map((g) => g.totalMinutes);
+
+        const ctx = document.getElementById("topGamesChart").getContext("2d");
+
+        if (window.topGamesChart instanceof Chart) {
+          window.topGamesChart.destroy();
+        }
+
+        window.topGamesChart = new Chart(ctx, {
+          type: "pie", // bar or pie
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Total Play Time (minutes)",
+                data,
+                backgroundColor: ["#2563eb", "#1d4ed8", "#3b82f6"],
+                borderRadius: 8,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: true },
+              title: { display: true, text: "Top 3 Most Played Games" },
+            },
+          },
+        });
+      }
+
       // Buttons
       document.getElementById("refreshBtn").addEventListener("click", () => {
         renderTopPlayersChart();
@@ -255,6 +310,7 @@
 
       // Initial load
       renderTopPlayersChart();
+      renderTopGamesChart();
     </script>
     <script src="./assets/js/weather.js"></script>
   </body>

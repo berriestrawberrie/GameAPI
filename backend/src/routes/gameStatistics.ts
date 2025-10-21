@@ -35,4 +35,36 @@ router.get("/top-players", async (req, res) => {
   }
 });
 
+// GET /api/statistics/top-games
+router.get("/top-games", async (req, res) => {
+  try {
+    // Aggregate total playtime per game
+    const results = await prisma.score.groupBy({
+      by: ["gameId"],
+      _sum: { durationMinutes: true },
+      orderBy: { _sum: { durationMinutes: "desc" } },
+      take: 3, // Top 3 most played games
+    });
+
+    // Fetch each game's name
+    const games = await Promise.all(
+      results.map(async (r) => {
+        const game = await prisma.game.findUnique({
+          where: { id: r.gameId },
+          select: { title: true },
+        });
+        return {
+          title: game?.title ?? "Unknown Game",
+          totalMinutes: r._sum.durationMinutes ?? 0,
+        };
+      })
+    );
+
+    res.json(games);
+  } catch (error) {
+    console.error("Error fetching top games:", error);
+    res.status(500).json({ error: "Failed to fetch top games" });
+  }
+});
+
 export default router;
