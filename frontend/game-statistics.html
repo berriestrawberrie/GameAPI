@@ -172,58 +172,89 @@
     </div>
 
     <script>
-      // Placeholder chart data (to be replaced with API data later)
-      const players = ["Nicklas", "Sabrina", "Lucas", "Maya", "Oliver"];
-      const totalTime = [320, 295, 280, 250, 240]; // in minutes
-      const colors = ["#2563eb", "#1d4ed8", "#3b82f6", "#60a5fa", "#93c5fd"];
+      const API_BASE = "http://localhost:5001/api";
 
-      const ctx = document.getElementById("playersChart").getContext("2d");
-      let chart = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: players,
-          datasets: [
-            {
-              label: "Total Play Time (min)",
-              data: totalTime,
-              backgroundColor: colors,
-              borderRadius: 6,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: "Minutes Played",
+      async function fetchTopPlayers() {
+        try {
+          const res = await fetch(`${API_BASE}/statistics/top-players`);
+          if (!res.ok) throw new Error("Failed to fetch top players");
+          return res.json();
+        } catch (err) {
+          console.error(err);
+          return [];
+        }
+      }
+
+      async function renderTopPlayersChart() {
+        const data = await fetchTopPlayers();
+        if (data.length === 0) return;
+
+        const ctx = document.getElementById("playersChart").getContext("2d");
+
+        // Extract chart data
+        const labels = data.map((p) => p.name);
+        const values = data.map((p) => p.totalMinutes);
+        const colors = ["#2563eb", "#1d4ed8", "#3b82f6", "#60a5fa", "#93c5fd"];
+
+        // Destroy existing chart if re-rendered
+        if (window.topPlayersChart) {
+          window.topPlayersChart.destroy();
+        }
+
+        // Create chart
+        window.topPlayersChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Total Play Time (min)",
+                data: values,
+                backgroundColor: colors.slice(0, data.length),
+                borderRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Minutes Played",
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: "Players",
+                },
               },
             },
-            x: {
-              title: {
-                display: true,
-                text: "Players",
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: (context) => `${context.parsed.y} minutes`,
+                },
               },
             },
           },
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-        },
-      });
+        });
+      }
 
       // Buttons
-      document
-        .getElementById("refreshBtn")
-        .addEventListener("click", () => chart.update());
+      document.getElementById("refreshBtn").addEventListener("click", () => {
+        renderTopPlayersChart();
+      });
 
       document.getElementById("backBtn").addEventListener("click", () => {
         window.location.href = "games.html";
       });
+
+      // Initial load
+      renderTopPlayersChart();
     </script>
     <script src="./assets/js/weather.js"></script>
   </body>
