@@ -32,7 +32,6 @@
             <i class="fa-solid fa-house text-4xl hover:text-blue-600"></i>
           </a>
         </li>
-        <!-- Profile (current page) -->
         <li>
           <a href="register-page.html" title="Profile">
             <i
@@ -41,7 +40,6 @@
             ></i>
           </a>
         </li>
-        <!-- Users -->
         <li>
           <a href="users.html" title="Users">
             <i
@@ -50,8 +48,6 @@
             ></i>
           </a>
         </li>
-
-        <!-- Games -->
         <li>
           <a href="games.html" title="Games">
             <i
@@ -73,19 +69,16 @@
 
     <!-- MAIN CONTENT -->
     <div class="h-screen w-screen p-[20px]">
-      <!--WEATHER WIDGET-->
+      <!-- WEATHER -->
       <div class="flex flex-col-reverse sm:flex-row justify-between">
         <div>
-          <!-- Weather Widget -->
           <div class="mx-auto max-w-3xl p-4">
-            <!--WEATHER INPU & BUTTON-->
             <div class="flex relative">
               <h2
                 class="text-base absolute -top-[22px] font-semibold flex items-center gap-2 mb-2"
               >
                 <i class="fa-solid fa-cloud-sun text-blue-500"></i> Weather
               </h2>
-
               <div class="flex flex-col md:flex-row gap-3 w-full">
                 <input
                   id="cityInput"
@@ -100,10 +93,8 @@
                 </button>
               </div>
             </div>
-            <!--WEATHER RESPONSE-->
             <p class="mt-2" id="weather"></p>
           </div>
-          <!--  END OF WEATHER WIDGET-->
         </div>
         <div
           class="flex items-center border w-full mb-2 sm:w-2/5 rounded-2xl h-[35px] px-3 text-gray-600"
@@ -116,7 +107,6 @@
           />
         </div>
       </div>
-      <!--END WEATHER WIDGET-->
 
       <!-- USER STATS CONTENT -->
       <main
@@ -126,162 +116,181 @@
           User Statistics
         </h1>
 
-        <!--TOP SECTION-->
-        <div class="w-full flex flex-col sm:flex-row sm:w-[80%] mb-2 gap-2">
-          <img src="images/user-2.png" />
-          <!--TOPSTATS-->
-          <div class="bg-red-100 border rounded w-full">
-            <p>Top stats go here</p>
-          </div>
-          <!--END OF TOP STATS-->
-        </div>
-        <!--END OF TOP SECTION-->
+        <!-- TOP SECTION (image + top chart side by side) -->
+        <div
+          class="flex flex-col sm:flex-row sm:w-[80%] justify-center items-center gap-6 mb-6"
+        >
+          <img src="images/user-2.png" alt="User" class="border" />
 
-        <!--BOTTOM SECTION-->
-        <div class="w-full flex flex-col sm:flex-row sm:w-[80%] gap-2">
-          <!-- GAME STATS CHART -->
           <div
-            class="bg-white rounded-lg shadow p-4 w-full flex flex-col items-center justify-center"
+            class="bg-white rounded-xl shadow flex flex-col items-center justify-center p-4"
+            style="width: 260px; height: 260px"
+          >
+            <h2 class="text-lg font-semibold mb-2 text-gray-700">
+              Game Time Share (%)
+            </h2>
+            <canvas
+              id="topStatsChart"
+              style="
+                width: 100%;
+                height: 100%;
+                max-width: 230px;
+                max-height: 230px;
+              "
+            ></canvas>
+          </div>
+        </div>
+
+        <!-- BOTTOM SECTION (chart + overview side by side) -->
+        <div
+          class="flex flex-col sm:flex-row sm:w-[80%] justify-center items-start gap-6"
+        >
+          <!-- Game Breakdown Chart -->
+          <div
+            class="bg-white rounded-xl shadow p-4 flex flex-col items-center justify-center"
+            style="width: 320px; height: 320px"
           >
             <h2 class="text-lg font-semibold mb-4 text-gray-700">
               Game Time Breakdown
             </h2>
-            <canvas id="gameChart" width="300" height="300"></canvas>
+            <canvas
+              id="gameChart"
+              style="
+                width: 100%;
+                height: 100%;
+                max-width: 280px;
+                max-height: 280px;
+              "
+            ></canvas>
           </div>
-          <!-- END GAME STATS CHART -->
 
-          <!--STATS WRAPPER-->
-          <div>
-            <!-- STATS PLACEHOLDER -->
-            <div class="bg-stone-100 rounded-lg shadow p-6 mb-2">
-              <p class="text-lg font-semibold mb-4 text-gray-700">Overview</p>
+          <!-- Overview -->
+          <div class="flex-1 bg-stone-100 rounded-xl shadow p-6">
+            <p class="text-lg font-semibold mb-4 text-gray-700">Overview</p>
 
-              <div class="grid grid-cols-2 gap-4 text-sm text-gray-700">
-                <div class="bg-white p-4 rounded shadow">
-                  <p class="font-semibold">Total Games Played</p>
-                  <p
-                    id="totalGames"
-                    class="text-blue-600 text-xl font-bold mt-1"
-                  >
-                    0
-                  </p>
-                </div>
-                <div class="bg-white p-4 rounded shadow">
-                  <p class="font-semibold">Total Play Time (min)</p>
-                  <p
-                    id="totalTime"
-                    class="text-blue-600 text-xl font-bold mt-1"
-                  >
-                    0
-                  </p>
-                </div>
+            <div class="grid grid-cols-2 gap-4 text-sm text-gray-700 mb-4">
+              <div class="bg-white p-4 rounded shadow">
+                <p class="font-semibold">Total Games Played</p>
+                <p id="totalGames" class="text-blue-600 text-xl font-bold mt-1">
+                  0
+                </p>
               </div>
-
-              <div class="mt-6">
-                <p class="text-gray-600 italic text-sm">
-                  Top game played:
-                  <span id="topGame" class="font-semibold text-gray-800"
-                    >N/A</span
-                  >
+              <div class="bg-white p-4 rounded shadow">
+                <p class="font-semibold">Total Play Time (min)</p>
+                <p id="totalTime" class="text-blue-600 text-xl font-bold mt-1">
+                  0
                 </p>
               </div>
             </div>
 
-            <!-- ACTION BUTTONS -->
+            <p class="text-gray-600 italic text-sm mb-6">
+              Top game played:
+              <span id="topGame" class="font-semibold text-gray-800">N/A</span>
+            </p>
+
             <div
-              class="flex flex-col sm:flex-row items-center justify-center gap-6"
+              class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-6"
             >
               <button
                 id="chooseNewPlayerBtn"
-                class="bg-gray-300 rounded font-semibold hover:bg-gray-400 transition profile-btn"
+                class="bg-gray-300 text-gray-800 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-400 hover:shadow-md transition flex items-center gap-2 justify-center min-w-[180px] whitespace-nowrap"
               >
-                <i class="fa-solid fa-user"></i> New Player
+                <i class="fa-solid fa-user"></i>
+                New Player
               </button>
 
               <button
                 id="playNewGameBtn"
-                class="bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 transition profile-btn"
+                class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-blue-700 hover:shadow-md transition flex items-center gap-2 justify-center min-w-[180px] whitespace-nowrap"
               >
-                <i class="fa-solid fa-gamepad"></i> Play New Game
+                <i class="fa-solid fa-gamepad"></i>
+                Play New Game
               </button>
             </div>
-            <!--END OF ACTION BUTTONS -->
           </div>
-          <!--END OF STATS WRAPPER-->
         </div>
-        <!--END OF BOTTOM SECTION-->
       </main>
     </div>
 
     <script>
       const API_BASE = "http://localhost:5001/api";
 
-      // Load selected user info from localStorage
       const userName = localStorage.getItem("selectedUserName");
       const userId = localStorage.getItem("selectedUserId");
-
       const userTitle = document.getElementById("userName");
       userTitle.textContent = userName
         ? `Statistics for ${userName}`
         : "No user selected";
 
-      // Fetch real statistics from backend
       async function fetchUserStats() {
         if (!userId) return;
-
         try {
           const res = await fetch(`${API_BASE}/users/${userId}/statistics`);
-          if (!res.ok) throw new Error("Failed to fetch user stats");
-
           const stats = await res.json();
-
           document.getElementById("totalGames").textContent = stats.totalGames;
           document.getElementById("totalTime").textContent = stats.totalTime;
           document.getElementById("topGame").textContent = stats.topGame;
-        } catch (error) {
-          console.error(error);
-          document.getElementById("totalGames").textContent = "–";
-          document.getElementById("totalTime").textContent = "–";
-          document.getElementById("topGame").textContent = "N/A";
+        } catch (err) {
+          console.error(err);
         }
       }
 
-      // Fetch per-game time breakdown
       async function fetchUserGameStats() {
         if (!userId) return;
-
         try {
           const res = await fetch(`${API_BASE}/users/${userId}/game-stats`);
-          if (!res.ok) throw new Error("Failed to fetch game stats");
           const data = await res.json();
-
           renderGameChart(data);
-        } catch (error) {
-          console.error("Error fetching game stats:", error);
+          renderTopStatsChart(data);
+        } catch (err) {
+          console.error("Error fetching game stats:", err);
         }
       }
 
-      // Create a pie chart with Chart.js
       function renderGameChart(stats) {
         const ctx = document.getElementById("gameChart").getContext("2d");
-
-        const labels = stats.map((item) => item.game);
-        const values = stats.map((item) => item.totalMinutes);
-
+        const labels = stats.map((i) => i.game);
+        const values = stats.map((i) => i.totalMinutes);
         new Chart(ctx, {
           type: "doughnut",
           data: {
-            labels: labels,
+            labels,
             datasets: [
               {
-                label: "Total Time (minutes)",
                 data: values,
                 backgroundColor: [
-                  "#3b82f6", // blue
-                  "#10b981", // green
-                  "#f59e0b", // yellow
-                  "#ef4444", // red
-                  "#8b5cf6", // purple
+                  "#3b82f6",
+                  "#10b981",
+                  "#f59e0b",
+                  "#ef4444",
+                  "#8b5cf6",
+                ],
+              },
+            ],
+          },
+          options: { plugins: { legend: { position: "bottom" } } },
+        });
+      }
+
+      function renderTopStatsChart(data) {
+        const ctx = document.getElementById("topStatsChart").getContext("2d");
+        const total = data.reduce((s, d) => s + d.totalMinutes, 0);
+        const labels = data.map((d) => d.game);
+        const minutes = data.map((d) => d.totalMinutes);
+        const percentages = minutes.map((m) => ((m / total) * 100).toFixed(1));
+        new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels,
+            datasets: [
+              {
+                data: minutes,
+                backgroundColor: [
+                  "#2563eb",
+                  "#16a34a",
+                  "#f97316",
+                  "#e11d48",
+                  "#8b5cf6",
                 ],
               },
             ],
@@ -289,28 +298,28 @@
           options: {
             plugins: {
               legend: { position: "bottom" },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => {
+                    const i = ctx.dataIndex;
+                    return `${ctx.label}: ${percentages[i]}% (${minutes[i]} min)`;
+                  },
+                },
+              },
             },
           },
         });
       }
-
-      // Run both data loads
       fetchUserStats();
       fetchUserGameStats();
-
-      // Buttons navigation
       document
         .getElementById("chooseNewPlayerBtn")
-        .addEventListener("click", () => {
-          window.location.href = "users.html";
-        });
-
+        .addEventListener("click", () => (window.location.href = "users.html"));
       document
         .getElementById("playNewGameBtn")
-        .addEventListener("click", () => {
-          window.location.href = "games.html";
-        });
+        .addEventListener("click", () => (window.location.href = "games.html"));
     </script>
+
     <script src="./assets/js/weather.js"></script>
   </body>
 </html>
