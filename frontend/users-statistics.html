@@ -125,7 +125,7 @@
 
         <!--TOP SECTION-->
         <div class="w-full flex flex-col sm:flex-row sm:w-[80%] mb-2 gap-2">
-          <img src="/frontend/images/user-2.png" />
+          <img src="images/user-2.png" />
           <!--TOPSTATS-->
           <div class="bg-red-100 border rounded w-full">
             <p>Top stats go here</p>
@@ -206,6 +206,8 @@
     </div>
 
     <script>
+      const API_BASE = "http://localhost:5001/api";
+
       // Load selected user info from localStorage
       const userName = localStorage.getItem("selectedUserName");
       const userId = localStorage.getItem("selectedUserId");
@@ -215,17 +217,29 @@
         ? `Statistics for ${userName}`
         : "No user selected";
 
-      // TODO: Replace these placeholders with API calls later
-      // Example API endpoint: GET /api/users/:id/statistics
-      const stats = {
-        totalGames: 4,
-        totalTime: 320,
-        topGame: "Game 2",
-      };
+      // Fetch real statistics from backend
+      async function fetchUserStats() {
+        if (!userId) return;
 
-      document.getElementById("totalGames").textContent = stats.totalGames;
-      document.getElementById("totalTime").textContent = stats.totalTime;
-      document.getElementById("topGame").textContent = stats.topGame;
+        try {
+          const res = await fetch(`${API_BASE}/users/${userId}/statistics`);
+          if (!res.ok) throw new Error("Failed to fetch user stats");
+
+          const stats = await res.json();
+
+          document.getElementById("totalGames").textContent = stats.totalGames;
+          document.getElementById("totalTime").textContent = stats.totalTime;
+          document.getElementById("topGame").textContent = stats.topGame;
+        } catch (error) {
+          console.error(error);
+          document.getElementById("totalGames").textContent = "–";
+          document.getElementById("totalTime").textContent = "–";
+          document.getElementById("topGame").textContent = "N/A";
+        }
+      }
+
+      // Run immediately
+      fetchUserStats();
 
       // Buttons navigation
       document
