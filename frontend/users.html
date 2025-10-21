@@ -159,33 +159,72 @@
 
     <script>
       const API_BASE = "http://localhost:5001/api";
+      let allUsers = []; // Keep all users here
 
-      // Fetch users from backend API
-      async function fetchUsersFromApi() {
-        const res = await fetch(`${API_BASE}/users`);
-        if (!res.ok) throw new Error("Failed to fetch users");
-        return res.json();
+      // Get users from the server
+      async function getUsers() {
+        const response = await fetch(`${API_BASE}/users`);
+        const users = await response.json();
+        return users;
       }
 
-      // Render users on main grid and avatar scroll
-      async function renderUsers() {
+      // Find users that match what user typed
+      function searchUsers(whatUserTyped) {
+        // If user didn't type anything, show all users
+        if (whatUserTyped === "") {
+          return allUsers;
+        }
+
+        // Look for users that match what user typed
+        let matchingUsers = [];
+        for (let i = 0; i < allUsers.length; i++) {
+          let user = allUsers[i];
+          let firstName = user.firstName.toLowerCase();
+          let lastName = user.lastName.toLowerCase();
+          let email = user.email.toLowerCase();
+          let searchText = whatUserTyped.toLowerCase();
+
+          // Check if the search text is in firstName, lastName, or email
+          if (
+            firstName.includes(searchText) ||
+            lastName.includes(searchText) ||
+            email.includes(searchText)
+          ) {
+            matchingUsers.push(user);
+          }
+        }
+        return matchingUsers;
+      }
+
+      // Show users on the page
+      async function showUsers(whichUsers) {
         const grid = document.getElementById("usersGrid");
         const scroller = document.getElementById("scrollable");
 
-        // Show loading states
-        grid.innerHTML = "<p>Loading users...</p>";
+        // If no specific users given, get all users from server
+        if (!whichUsers) {
+          grid.innerHTML = "<p>Loading users...</p>";
+          scroller.innerHTML = "";
+
+          try {
+            allUsers = await getUsers(); // Save all users
+            whichUsers = allUsers; // Show all users
+          } catch (error) {
+            grid.innerHTML = '<p class="text-red-600">Could not load users</p>';
+            return;
+          }
+        }
+
+        // Clear the page first
+        grid.innerHTML = "";
         scroller.innerHTML = "";
 
-        try {
-          const users = await fetchUsersFromApi();
-          grid.innerHTML = "";
-
-          // Main grid
-          users.forEach((u) => {
-            const card = document.createElement("div");
-            card.className =
-              "cursor-pointer flex flex-col items-center bg-stone-200 rounded-lg p-2 hover:bg-stone-300 transition";
-            card.innerHTML = `
+        // Main grid
+        whichUsers.forEach((u) => {
+          const card = document.createElement("div");
+          card.className =
+            "cursor-pointer flex flex-col items-center bg-stone-200 rounded-lg p-2 hover:bg-stone-300 transition";
+          card.innerHTML = `
               <div class="w-full bg-stone-100 aspect-square flex items-center justify-center rounded">
                 <img src="${
                   u.avatarUrl || "./images/user.png"
@@ -195,52 +234,55 @@
                 u.firstName
               } ${u.lastName}</p>
             `;
-            card.addEventListener("click", () => {
-              localStorage.setItem("selectedUserId", u.id);
-              localStorage.setItem(
-                "selectedUserName",
-                `${u.firstName} ${u.lastName}`
-              );
-              window.location.href = "users-statistics.html";
-            });
-            grid.appendChild(card);
+          card.addEventListener("click", () => {
+            localStorage.setItem("selectedUserId", u.id);
+            localStorage.setItem(
+              "selectedUserName",
+              `${u.firstName} ${u.lastName}`
+            );
+            window.location.href = "users-statistics.html";
           });
+          grid.appendChild(card);
+        });
 
-          // Avatar scroll
-          users.forEach((u) => {
-            const avatar = document.createElement("div");
-            avatar.className = "item cursor-pointer";
-            avatar.innerHTML = `<img src="${
-              u.avatarUrl || "./images/user.png"
-            }" class="rounded-full object-cover border-1 border-stone-400" />${
-              u.firstName
-            }`;
-            avatar.addEventListener("click", () => {
-              localStorage.setItem("selectedUserId", u.id);
-              localStorage.setItem(
-                "selectedUserName",
-                `${u.firstName} ${u.lastName}`
-              );
-              window.location.href = "users-statistics.html";
-            });
-            scroller.appendChild(avatar);
+        // Avatar scroll
+        whichUsers.forEach((u) => {
+          const avatar = document.createElement("div");
+          avatar.className = "item cursor-pointer";
+          avatar.innerHTML = `<img src="${
+            u.avatarUrl || "./images/user.png"
+          }" class="rounded-full object-cover border-1 border-stone-400" />${
+            u.firstName
+          }`;
+          avatar.addEventListener("click", () => {
+            localStorage.setItem("selectedUserId", u.id);
+            localStorage.setItem(
+              "selectedUserName",
+              `${u.firstName} ${u.lastName}`
+            );
+            window.location.href = "users-statistics.html";
           });
-        } catch (err) {
-          grid.innerHTML = '<p class="text-red-600">Failed to load users</p>';
-          console.error(err);
-        }
+          scroller.appendChild(avatar);
+        });
       }
 
-      // Render users on page load
-      renderUsers();
+      // Show users when page loads
+      showUsers();
 
-      // Add User button → redirect to register page
+      // When user clicks "Add User" button, go to register page
       document
         .getElementById("addUserBtn")
-        .addEventListener(
-          "click",
-          () => (window.location.href = "register-page.html")
-        );
+        .addEventListener("click", function () {
+          window.location.href = "register-page.html";
+        });
+
+      // When user types in search box, filter the users
+      const searchBox = document.querySelector('input[placeholder="Search"]');
+      searchBox.addEventListener("input", function (event) {
+        let whatUserTyped = event.target.value;
+        let matchingUsers = searchUsers(whatUserTyped);
+        showUsers(matchingUsers);
+      });
     </script>
 
     <script src="assets/js/scroll.js"></script>
