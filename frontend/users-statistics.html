@@ -14,6 +14,9 @@
 
     <!-- TAILWIND -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
 
   <body class="sm:flex bg-stone-100">
@@ -136,11 +139,16 @@
 
         <!--BOTTOM SECTION-->
         <div class="w-full flex flex-col sm:flex-row sm:w-[80%] gap-2">
-          <!--GAME CIRCLE CHART-->
-          <div class="bg-blue-100 border rounded w-full">
-            <p>Game Chart Stuff goes here</p>
+          <!-- GAME STATS CHART -->
+          <div
+            class="bg-white rounded-lg shadow p-4 w-full flex flex-col items-center justify-center"
+          >
+            <h2 class="text-lg font-semibold mb-4 text-gray-700">
+              Game Time Breakdown
+            </h2>
+            <canvas id="gameChart" width="300" height="300"></canvas>
           </div>
-          <!--GAME CIRCLE CHART-->
+          <!-- END GAME STATS CHART -->
 
           <!--STATS WRAPPER-->
           <div>
@@ -238,8 +246,57 @@
         }
       }
 
-      // Run immediately
+      // Fetch per-game time breakdown
+      async function fetchUserGameStats() {
+        if (!userId) return;
+
+        try {
+          const res = await fetch(`${API_BASE}/users/${userId}/game-stats`);
+          if (!res.ok) throw new Error("Failed to fetch game stats");
+          const data = await res.json();
+
+          renderGameChart(data);
+        } catch (error) {
+          console.error("Error fetching game stats:", error);
+        }
+      }
+
+      // Create a pie chart with Chart.js
+      function renderGameChart(stats) {
+        const ctx = document.getElementById("gameChart").getContext("2d");
+
+        const labels = stats.map((item) => item.game);
+        const values = stats.map((item) => item.totalMinutes);
+
+        new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Total Time (minutes)",
+                data: values,
+                backgroundColor: [
+                  "#3b82f6", // blue
+                  "#10b981", // green
+                  "#f59e0b", // yellow
+                  "#ef4444", // red
+                  "#8b5cf6", // purple
+                ],
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              legend: { position: "bottom" },
+            },
+          },
+        });
+      }
+
+      // Run both data loads
       fetchUserStats();
+      fetchUserGameStats();
 
       // Buttons navigation
       document

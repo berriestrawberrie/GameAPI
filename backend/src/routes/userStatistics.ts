@@ -55,4 +55,44 @@ router.get("/:id/statistics", async (req, res) => {
   }
 });
 
+// GET /api/users/:id/game-stats
+// Returns total play time per game for a given user.
+router.get("/:id/game-stats", async (req, res) => {
+  const userId = Number(req.params.id);
+
+  if (isNaN(userId)) {
+    return res.status(400).json({ error: "Invalid user ID" });
+  }
+
+  try {
+    const scores = await prisma.score.findMany({
+      where: { userId },
+      include: { game: true },
+    });
+
+    if (scores.length === 0) {
+      return res.json([]);
+    }
+
+    // Aggregate total minutes per game
+    const stats: Record<string, number> = {};
+
+    scores.forEach((s) => {
+      const title = s.game.title;
+      const minutes = s.durationMinutes || 0;
+      stats[title] = (stats[title] || 0) + minutes;
+    });
+
+    const result = Object.entries(stats).map(([game, totalMinutes]) => ({
+      game,
+      totalMinutes,
+    }));
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error fetching game stats:", error);
+    res.status(500).json({ error: "Failed to fetch game stats" });
+  }
+});
+
 export default router;
