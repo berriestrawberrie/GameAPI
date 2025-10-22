@@ -22,6 +22,7 @@ PORT=5001
 ```
 
 The database has the following structure
+
 ![ERD Diagram](/frontend/images/GameAPI.drawio.png)
 
 ### 3. Install Dependencies
