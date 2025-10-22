@@ -268,7 +268,16 @@
               },
             ],
           },
-          options: { plugins: { legend: { position: "bottom" } } },
+          options: {
+            plugins: {
+              legend: { position: "bottom" },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${ctx.label}: ${ctx.parsed} min`,
+                },
+              },
+            },
+          },
         });
       }
 
@@ -284,7 +293,7 @@
             labels,
             datasets: [
               {
-                data: minutes,
+                data: percentages,
                 backgroundColor: [
                   "#2563eb",
                   "#16a34a",
@@ -302,7 +311,7 @@
                 callbacks: {
                   label: (ctx) => {
                     const i = ctx.dataIndex;
-                    return `${ctx.label}: ${percentages[i]}% (${minutes[i]} min)`;
+                    return `${ctx.label}: ${percentages[i]}%`;
                   },
                 },
               },
