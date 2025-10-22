@@ -26,6 +26,25 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/table/:gameId", async (req, res) => {
+  try {
+    const gameId = req.params.gameId;
+
+    const scores = await prisma.score.findMany({
+      where: {
+        gameId: parseInt(req.params.gameId),
+      },
+      include: {
+        user: true,
+      },
+    });
+    res.json(scores);
+  } catch (error: unknown) {
+    console.error("Error fetching user joined game scores:", error);
+    res.status(500).json({ error: "Failed to fetch user joined game scores" });
+  }
+});
+
 router.get("/:gameId", async (req, res) => {
   try {
     console.log(req.params.gameId);
