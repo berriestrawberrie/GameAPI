@@ -30,18 +30,19 @@ const stopBtn = document.getElementById("stopBtn");
 const exitBtn = document.getElementById("exitBtn");
 
 function updateDisplay() {
-  const minutes = Math.floor(elapsedSeconds / 60)
+  const scaledSeconds = elapsedSeconds * 60; // 1 sec = 1 min
+  const minutes = Math.floor(scaledSeconds / 60)
     .toString()
     .padStart(2, "0");
-  const seconds = (elapsedSeconds % 60).toString().padStart(2, "0");
+  const seconds = (scaledSeconds % 60).toString().padStart(2, "0");
   display.textContent = `${minutes}:${seconds}`;
 }
 
 startBtn.addEventListener("click", () => {
   if (!timerInterval) {
     timerInterval = setInterval(() => {
-      elapsedSeconds++;
-      updateDisplay();
+      elapsedSeconds++; // 1 real second
+      updateDisplay(); // shows 1 minute
     }, 1000);
   }
 });
