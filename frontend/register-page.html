@@ -155,17 +155,24 @@
           <fieldset class="border-none flex-col sm:flex justify-between mt-4">
             <div class="flex flex-col items-center">
               <div
-                class="mb-[10px] w-fit border border-gray-400 p-2 rounded bg-white"
+                class="relative mb-[10px] w-fit border border-gray-400 p-2 rounded bg-white"
               >
                 <img
-                  class="opacity-50"
+                  id="imagePreview"
+                  class="opacity-20"
                   src="./images/user-2.png"
                   alt="Profile Preview"
                 />
+                <span
+                  id="closeBtn"
+                  class="hidden text-white font-bold text-lg absolute -top-[10px] -right-[5px]"
+                >
+                  <i class="fa-solid fa-xmark"></i></i>
+                </span>
               </div>
               <input
                 type="file"
-                id="file"
+                id="imageInput"
                 name="file"
                 class="block text-sm text-gray-600 max-w-[200px] rounded p-1"
               />
@@ -186,6 +193,39 @@
     </div>
 
     <script>
+      //SHOW IMAGE PREVIEW BEFORE SUBMIT
+      const imageInput = document.getElementById("imageInput");
+      const preview = document.getElementById("imagePreview");
+      const close = document.getElementById("closeBtn");
+      imageInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            preview.src = e.target.result;
+            preview.classList.remove("opacity-20");
+            //SHOW CLOSE BUTTON WHEN IMAGE UPLOADED
+            close.classList.remove("hidden");
+            close.classList.add("flex");
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.src = "./images/user-2.png";
+          preview.classList.add("opacity-20");
+          close.classList.add("hidden");
+          close.classList.remove("flex");
+        }
+      });
+
+      //ADD ONCLICK ACTION TO CLOSE BUTTON
+      close.addEventListener("click", () => {
+        imageInput.value = "";
+        preview.src = "./images/user-2.png";
+        preview.classList.add("opacity-20");
+        close.classList.add("hidden");
+        close.classList.remove("flex");
+      });
       // TEMPORARY: simulate registration, then redirect
       document
         .getElementById("registerForm")

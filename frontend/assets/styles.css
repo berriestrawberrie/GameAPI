@@ -10,6 +10,20 @@ button:hover {
   box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
   transform: translate(2px, 3px);
 }
+#closeBtn {
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 2px 0 1px rgba(0, 0, 0, 1);
+  transition: all 0.1s ease-in-out;
+  height: 30px;
+  width: 30px;
+  border-radius: 5px;
+  background-color: red;
+}
+#closeBtn:hover {
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  transform: translate(2px, 3px);
+}
 
 tr,
 td {
