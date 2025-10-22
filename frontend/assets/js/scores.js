@@ -30,18 +30,19 @@ const stopBtn = document.getElementById("stopBtn");
 const exitBtn = document.getElementById("exitBtn");
 
 function updateDisplay() {
-  const minutes = Math.floor(elapsedSeconds / 60)
+  const scaledSeconds = elapsedSeconds * 60; // 1 sec = 1 min
+  const minutes = Math.floor(scaledSeconds / 60)
     .toString()
     .padStart(2, "0");
-  const seconds = (elapsedSeconds % 60).toString().padStart(2, "0");
+  const seconds = (scaledSeconds % 60).toString().padStart(2, "0");
   display.textContent = `${minutes}:${seconds}`;
 }
 
 startBtn.addEventListener("click", () => {
   if (!timerInterval) {
     timerInterval = setInterval(() => {
-      elapsedSeconds++;
-      updateDisplay();
+      elapsedSeconds++; // 1 real second
+      updateDisplay(); // shows 1 minute
     }, 1000);
   }
 });
@@ -50,6 +51,7 @@ startBtn.addEventListener("click", () => {
 stopBtn.addEventListener("click", () => {
   clearInterval(timerInterval);
   timerInterval = null;
+
   //POST NEW SCORES
   const newScore = {
     userId: parseInt(userId),
@@ -99,7 +101,7 @@ updateDisplay();
 
 // Fetch games from backend API by Game ID
 async function fetchScoresForGame(gameId) {
-  const res = await fetch(`${API_BASE}/scores/${gameId}`);
+  const res = await fetch(`${API_BASE}/scores/table/${gameId}`);
   if (!res.ok) throw new Error("Failed to fetch games");
   return res.json();
 }
@@ -113,13 +115,10 @@ async function renderScores() {
       //CREATE NEW TABLE ROW
       const row = document.createElement("tr");
       const user = document.createElement("td");
-      user.textContent = score.userId;
+      user.textContent = score.user.firstName + " " + score.user.lastName;
       const scoreVal = document.createElement("td");
       scoreVal.textContent = score.durationMinutes;
-      const gameNum = document.createElement("td");
-      gameNum.textContent = score.gameId;
 
-      row.appendChild(gameNum);
       row.appendChild(user);
       row.appendChild(scoreVal);
       tbody.appendChild(row);
