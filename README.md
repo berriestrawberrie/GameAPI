@@ -47,7 +47,7 @@ if your server is running correctly you will the following in your terminal:
 
 ## 💻 Using the App
 
-Run index.html file in the frontend folder.
+Run index.html file in the frontend folder or follow the terminal commands.
 
 ### 1. Start the App
 
