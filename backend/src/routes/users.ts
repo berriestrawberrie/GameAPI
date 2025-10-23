@@ -10,6 +10,8 @@
  */
 import { Router } from "express";
 import { prisma } from "../lib/prisma";
+import { userSchema } from "../schemas/user";
+import { ZodError } from "zod";
 
 const router = Router();
 
@@ -36,9 +38,13 @@ router.get("/", async (req, res) => {
 
 // POST Endpoint to create a new user
 router.post("/", async (req, res) => {
-  const { email, firstName, lastName, avatarUrl } = req.body;
+  // const { email, firstName, lastName, avatarUrl } = req.body;
 
   try {
+    // Validate data with Zod
+    const validatedData = userSchema.parse(req.body);
+    const { email, firstName, lastName, avatarUrl } = validatedData;
+
     const newUser = await prisma.user.create({
       data: {
         email,
@@ -58,8 +64,14 @@ router.post("/", async (req, res) => {
 
     res.status(201).json(newUser);
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ error: "Failed to create user" });
+    if (error instanceof ZodError) {
+      res
+        .status(400)
+        .json({ error: "Invalid user data", details: error.errors });
+    } else {
+      console.error("Error creating user:", error);
+      res.status(500).json({ error: "Failed to create user" });
+    }
   }
 });
 

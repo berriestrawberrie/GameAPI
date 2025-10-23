@@ -248,7 +248,9 @@
           })
             .then((response) => {
               if (!response.ok) {
-                throw new Error("Network response was not ok");
+                return response.json().then(errorData => {
+                  throw errorData;
+                });
               }
               return response.json();
             })
@@ -258,8 +260,13 @@
               window.location.href = "users.html";
             })
             .catch((error) => {
-              console.error("Error:", error);
-              alert("There was an error registering the player.");
+              if (error.details && error.details[0]) {
+                
+                // Get first validation error from Zod (array[0] = first message)
+                alert("Registration failed: " + error.details[0].message);
+              } else {
+                alert("Registration failed. Please try again.");
+              }
             });
         });
     </script>
