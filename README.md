@@ -29,12 +29,16 @@ cd GameAPI
 
 Go to the backend folder and install dependencies:
 
+```
 cd backend
 npm install
+```
 
 Then, generate Prisma client:
 
+```
 npx prisma generate
+```
 
 ### 3. Environment Variables
 
@@ -53,14 +57,18 @@ PORT=5001
 
 Run Prisma migration and seed the database with sample data:
 
+```
 npx prisma migrate dev
 npx prisma db seed
+```
 
 ✅ This creates the tables and populates them with initial sample users, games, and scores.
 
 ### 5. Start the Backend Server
 
+```
 npm run dev
+```
 
 Your backend should now be running at:
 👉 http://localhost:5001
@@ -69,8 +77,10 @@ Your backend should now be running at:
 
 In another terminal window, start the frontend (using a simple static server):
 
+```
 cd frontend
 npx live-server --port=3000
+```
 
 Or, if you’re using VS Code:
 
