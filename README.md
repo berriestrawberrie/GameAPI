@@ -4,15 +4,41 @@
 
 Build an app where users choose games, start/stop a timer, and view clear statistics of played time.
 
+## ⚙️ Requirements
+
+Before you begin, ensure you have:
+
+- **Node.js** (v18+ recommended)
+- **npm** or **yarn**
+- **PostgreSQL** installed and running
+- A valid **DATABASE_URL** connection string in `.env`
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/berriestrawberrie/GameAPI.git
+
+cd GameAPI
 ```
 
-### 2. Create a `.env` File
+### 2. Backend setup
+
+Go to the backend folder and install dependencies:
+
+cd backend
+npm install
+
+Then, generate Prisma client:
+
+npx prisma generate
+
+### 3. Environment Variables
+
+Create a `.env` File
 
 Add the following connection string to your `.env` file make sure to place it in the backend folder:
 
@@ -21,45 +47,49 @@ DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJI
 PORT=5001
 ```
 
-The database has the following structure
-
 ![ERD Diagram](/frontend/images/GameAPI.drawio.png)
 
-### 3. Install Dependencies
+### 4. Database Migration & Seeding
 
-```bash
-npm install
-```
+Run Prisma migration and seed the database with sample data:
 
-### 4. Run the Server
+npx prisma migrate dev
+npx prisma db seed
 
-make sure to cd into the backend folder:
+✅ This creates the tables and populates them with initial sample users, games, and scores.
 
-```bash
+### 5. Start the Backend Server
+
 npm run dev
-```
 
-if your server is running correctly you will the following in your terminal:
+Your backend should now be running at:
+👉 http://localhost:5001
 
-```
-✅ Server running at http://localhost:5001
-```
+### 6. Frontend setup
 
-## 💻 Using the App
+In another terminal window, start the frontend (using a simple static server):
 
-Run index.html file in the frontend folder or follow the terminal commands.
+cd frontend
+npx live-server --port=3000
 
-### 1. Start the App
+Or, if you’re using VS Code:
 
-In a new terminal make sure to cd into the frontend folder:
+Right-click on frontend/index.html
 
-```bash
-npx live-server
-```
+Choose "Open with Live Server"
 
-if prompted to install live-server select ( y ). The application will then open in your preferred browser. You can use the left sidebar to navigate to all the pages.
+Frontend will be served at:
+👉 http://localhost:3000
 
-### 2. Registering Users
+### 7. Testing the App
+
+Open your browser at http://localhost:3000
+
+Create users and start new game sessions
+
+View live statistics and charts on the User Statistics and Game Statistics pages
+
+### 8. Registering Users
 
 You can register a new user by selecting the single user icon.
 The following fields are required:
@@ -70,13 +100,13 @@ The following fields are required:
 
 ![Registration page](/frontend/images/screenshots/register.png)
 
-### 2. User Selection
+### 9. User Selection
 
 Upon successful user registraion you can select a user from the users pages.
 ![Users page](/frontend/images/screenshots/alluser.png)
 Clicking on avatar images from the grid or the carousel will take you to their user profile page. That has their personal game play statistics.
 
-### 3. Game Selection
+### 10. Game Selection
 
 After you select a user you can play any of the four populate game options from the game selection page.
 
@@ -87,7 +117,7 @@ Selecting a game will redirect you to that game timer page. Where you can play a
 
 The table shows all the current scores for this game, when you submit your playtime your score will populate in the table.
 
-### 3. Game Statistics
+### 11. Game Statistics
 
 Summary information for all the users and their scores can be view on the game statistics page.
 
