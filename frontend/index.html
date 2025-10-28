@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="icon" type="image/png" href="images/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Game API</title>
     <!--TAILWIND-->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <!--FONTAWESOME-->
@@ -111,7 +112,43 @@
         </div>
       </div>
       <!--END WEATHER WIDGET-->
-      Page content
+      <div class="flex flex-col w-full items-center">
+        <h1 class="text-5xl text-blue-600 font-bold mb-8">Game API</h1>
+        <img class="w-4/5 sm:w-2/5" src="images/game.png" />
+        <div
+          class="bg-white mt-4 rounded-lg w-4/5 sm:w-2/5 p-2 border-2 border-blue-600"
+        >
+          <div
+            class="-mt-6 mx-auto bg-blue-600 p-2 rounded-lg w-[150px] text-white font-bold"
+          >
+            Backend Project
+          </div>
+          <p class="mt-2">
+            🏁 Build an app where users choose games, start/stop a timer, and
+            view clear statistics of played time.
+          </p>
+          <p class="text-right">
+            <a
+              href="https://github.com/berriestrawberrie/GameAPI"
+              target="_blank"
+              ><i
+                class="text-right hover:text-blue-500 text-4xl fa-brands fa-github"
+              ></i
+            ></a>
+          </p>
+        </div>
+        <div class="mt-2 w-4/5 sm:w-2/5 flex flex-wrap justify-center gap-2">
+          <span class="p-2 rounded-3xl text-cyan-800 font-semibold bg-cyan-200"
+            >@Jessica Rodrigues
+          </span>
+          <span class="p-2 rounded-3xl text-sky-800 font-semibold bg-sky-200"
+            >@BrookeBrown</span
+          >
+          <span class="p-2 rounded-3xl text-blue-800 font-semibold bg-blue-200"
+            >@Victor Kristiansson</span
+          >
+        </div>
+      </div>
     </div>
     <script src="/frontend/assets/js/weather.js"></script>
   </body>
